@@ -12,7 +12,7 @@ import { Button } from "./components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover";
 import { Logo } from "./components/Logo";
 import {
-  BarChart3, Bell, CloudOff, Dumbbell, History, Home, ListChecks, Loader2, LogOut, MoreHorizontal, Ruler, ShieldCheck, User,
+  BarChart3, Bell, CloudOff, Dumbbell, History, Home, ListChecks, Loader2, LogOut, MoreHorizontal, Ruler, ShieldCheck, User, Users,
 } from "lucide-react";
 import { Notification, trainingApi } from "../lib/api";
 import { onQueueChange, pendingCount } from "../lib/offline";
@@ -118,7 +118,7 @@ function BottomBar({ more, username, onLogout }: { more: NavItem[]; username: st
     <nav aria-label="Nawigacja główna" className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md items-end">
         <NavLink to="/" end className={tab}><Home className="h-5 w-5" /> Pulpit</NavLink>
-        <NavLink to="/historia" className={tab}><History className="h-5 w-5" /> Historia</NavLink>
+        <NavLink to="/spolecznosc" className={tab}><Users className="h-5 w-5" /> Społeczność</NavLink>
         <NavLink to="/trening" className="flex flex-1 flex-col items-center gap-0.5 pb-2 text-[11px] font-semibold text-primary">
           {({ isActive }) => (
             <>
@@ -129,7 +129,7 @@ function BottomBar({ more, username, onLogout }: { more: NavItem[]; username: st
             </>
           )}
         </NavLink>
-        <NavLink to="/plany" className={tab}><ListChecks className="h-5 w-5" /> Plany</NavLink>
+        <NavLink to="/historia" className={tab}><History className="h-5 w-5" /> Historia</NavLink>
         <Popover>
           <PopoverTrigger className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] ${moreActive ? "font-semibold text-primary" : "text-muted-foreground"}`}>
             <MoreHorizontal className="h-5 w-5" /> Więcej
@@ -159,6 +159,7 @@ function AppNav() {
     { to: "/", label: "Pulpit", icon: Home, end: true },
     { to: "/trening", label: "Trening", icon: Dumbbell },
     { to: "/historia", label: "Historia", icon: History },
+    { to: "/spolecznosc", label: "Społeczność", icon: Users },
     { to: "/plany", label: "Plany", icon: ListChecks },
     { to: "/pomiary", label: "1RM i pomiary", icon: Ruler },
     { to: "/statystyki", label: "Statystyki", icon: BarChart3 },
@@ -193,7 +194,7 @@ function AppNav() {
           </div>
         </nav>
       </header>
-      <BottomBar more={links.filter((l) => ["/pomiary", "/statystyki", "/profil", "/moderacja"].includes(l.to))}
+      <BottomBar more={links.filter((l) => ["/plany", "/pomiary", "/statystyki", "/profil", "/moderacja"].includes(l.to))}
         username={user.username} onLogout={() => logout()} />
     </>
   );
@@ -215,6 +216,7 @@ const pages = {
   HistoryPage: () => import("./components/HistoryPage"),
   PasswordResetPage: () => import("./components/PasswordResetPage"),
   PublicProfilePage: () => import("./components/PublicProfilePage"),
+  CommunityPage: () => import("./components/social/CommunityPage"),
   ModerationPage: () => import("./components/ModerationPage"),
   SusPage: () => import("./components/SusPage"),
 };
@@ -234,6 +236,7 @@ const PasswordResetPage = lazy(() => pages.PasswordResetPage().then((m) => ({ de
 const SusPage = lazy(() => pages.SusPage().then((m) => ({ default: m.SusPage })));
 const ModerationPage = lazy(() => pages.ModerationPage().then((m) => ({ default: m.ModerationPage })));
 const PublicProfilePage = lazy(() => pages.PublicProfilePage().then((m) => ({ default: m.PublicProfilePage })));
+const CommunityPage = lazy(() => pages.CommunityPage().then((m) => ({ default: m.CommunityPage })));
 
 // Po starcie pozostałe strony są pobierane w tle, aby service worker zapisał je do pracy offline.
 function preloadPages() {
@@ -283,12 +286,14 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <AppNav />
+          <main id="tresc">
           <ErrorBoundary>
           <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/reset-hasla" element={<PasswordResetPage />} />
             <Route path="/uzytkownicy/:username" element={protect(<PublicProfilePage />)} />
+            <Route path="/spolecznosc" element={protect(<CommunityPage />)} />
             <Route path="/" element={protect(<GymDashboard />)} />
             <Route path="/trening" element={protect(<WorkoutLogger />)} />
             <Route path="/historia" element={protect(<HistoryPage />)} />
@@ -308,6 +313,7 @@ export default function App() {
           </Routes>
           </Suspense>
           </ErrorBoundary>
+          </main>
           <UpdateBanner />
           <ServerWakeBanner />
           <Toaster />

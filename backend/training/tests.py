@@ -438,8 +438,12 @@ class WF04_WidocznoscProfiluTest(TestCase):
         trening(self.adam, self.ex, 100)
 
     def test_profil_domyslnie_prywatny(self):
-        self.assertEqual(self.ewa.get('/api/users/adam/').status_code, 404)
-        self.assertEqual(self.adam.get('/api/users/adam/').status_code, 200)  # własny zawsze widoczny
+        r = self.ewa.get('/api/users/adam/').json()   # prywatny: tylko nazwa, zdjęcie i obserwowanie
+        self.assertTrue(r['restricted'])
+        self.assertEqual((r['plans'], r['trainings']), ([], None))
+        self.assertNotIn('level', r)
+        self.assertFalse(self.adam.get('/api/users/adam/').json()['restricted'])  # własny zawsze w całości
+        self.assertEqual(self.ewa.get('/api/users/nieistnieje/').status_code, 404)
 
     def test_profil_publiczny_bez_treningow(self):
         self.adam.put('/api/profile/', {'profile_public': True}, format='json')
@@ -1234,3 +1238,110 @@ class ZdjecieProfiloweTest(TestCase):
         self.assertEqual(c.delete('/api/profile/avatar/').status_code, 204)
         self.assertIsNone(c.get('/api/auth/me/').json()['avatar_url'])
         self.assertEqual(c.get(url).status_code, 404)
+
+
+class SpolecznoscTest(TestCase):
+    """Tablica treningów, obserwowanie i zasady widoczności (training/social.py)."""
+
+    def setUp(self):
+        self.adam, self.ewa, self.jan = klient('adam'), klient('ewa'), klient('jan')
+        self.ex = cwiczenie()
+
+    def publiczny(self, c):
+        c.put('/api/profile/', {'profile_public': True}, format='json')
+
+    def tablica(self, c, tab='all'):
+        return c.get(f'/api/feed/?tab={tab}').json()['results']
+
+    def test_udostepnienie_domyslnie_z_profilu_albo_wybor_przy_zapisie(self):
+        self.assertTrue(trening(self.adam, self.ex, 100).json()['shared'])               # domyślnie udostępniony
+        self.assertFalse(trening(self.adam, self.ex, 100, shared=False).json()['shared'])
+        self.adam.put('/api/profile/', {'share_workouts_default': False}, format='json')
+        self.assertFalse(trening(self.adam, self.ex, 100).json()['shared'])
+
+    def test_profil_publiczny_widza_wszyscy_ale_tylko_udostepnione(self):
+        self.publiczny(self.adam)
+        widoczny = trening(self.adam, self.ex, 100).json()['id']
+        trening(self.adam, self.ex, 110, shared=False)
+        self.assertEqual([i['id'] for i in self.tablica(self.ewa)], [widoczny])
+        self.assertEqual(self.tablica(self.ewa, 'following'), [])                          # jeszcze nie obserwuje
+        self.ewa.post('/api/users/adam/follow/')
+        self.assertEqual([i['id'] for i in self.tablica(self.ewa, 'following')], [widoczny])
+
+    def test_profil_prywatny_tylko_dla_obserwujacych_sie_wzajemnie(self):
+        sid = trening(self.adam, self.ex, 100).json()['id']
+        self.assertEqual(self.tablica(self.ewa), [])
+        self.ewa.post('/api/users/adam/follow/')
+        self.assertEqual(self.tablica(self.ewa), [])                                       # jednostronnie - nic
+        r = self.adam.post('/api/users/ewa/follow/').json()
+        self.assertTrue(r['mutual'])
+        self.assertEqual([i['id'] for i in self.tablica(self.ewa)], [sid])
+        self.assertEqual([i['id'] for i in self.tablica(self.ewa, 'following')], [sid])
+        self.assertEqual(self.tablica(self.jan), [])                                       # osoba trzecia - nic
+        profil = self.ewa.get('/api/users/adam/').json()
+        self.assertTrue(profil['restricted'] and profil['can_see_workouts'])
+        self.assertEqual(len(self.ewa.get('/api/users/adam/workouts/').json()['results']), 1)
+        self.assertEqual(self.jan.get('/api/users/adam/workouts/').json()['results'], [])
+
+    def test_tablica_bez_notatek_tetna_i_zablokowanych_kont(self):
+        self.publiczny(self.adam)
+        trening(self.adam, self.ex, 100, notes='boli mnie kolano', post_workout_hr=150)
+        item = self.tablica(self.ewa)[0]
+        self.assertEqual((item['user']['username'], item['sets'], item['tonnage']), ('adam', 1, 500))
+        self.assertEqual(item['exercises'][0]['sets'], ['100×5'])
+        self.assertNotIn('kolano', str(item))
+        self.assertNotIn('150', str(item))
+        User.objects.filter(username='adam').update(is_active=False)
+        self.assertEqual(self.tablica(self.ewa), [])
+
+    def test_brawa_i_powiadomienia(self):
+        self.publiczny(self.adam)
+        sid = trening(self.adam, self.ex, 100).json()['id']
+        r = self.ewa.post(f'/api/sessions/{sid}/kudos/').json()
+        self.assertEqual((r['kudos'], r['my_kudos']), (1, True))
+        self.assertTrue(self.tablica(self.ewa)[0]['my_kudos'])
+        self.assertEqual(self.adam.post(f'/api/sessions/{sid}/kudos/').status_code, 400)   # nie za własny
+        self.assertIn('brawo', Notification.objects.filter(user__username='adam').first().text)
+        self.assertEqual(self.ewa.delete(f'/api/sessions/{sid}/kudos/').json()['kudos'], 0)
+        prywatny = trening(self.jan, self.ex, 80).json()['id']
+        self.assertEqual(self.ewa.post(f'/api/sessions/{prywatny}/kudos/').status_code, 404)
+
+    def test_obserwowanie_liczniki_i_powiadomienia(self):
+        r = self.ewa.post('/api/users/adam/follow/').json()
+        self.assertEqual((r['i_follow'], r['mutual'], r['followers']), (True, False, 1))
+        self.assertIn('obserwuje Cię', Notification.objects.filter(user__username='adam').first().text)
+        self.adam.post('/api/users/ewa/follow/')
+        self.assertIn('wzajemnie', Notification.objects.filter(user__username='ewa').first().text)
+        self.assertEqual(self.ewa.post('/api/users/ewa/follow/').status_code, 400)        # siebie nie
+        self.assertEqual([p['username'] for p in self.ewa.get('/api/people/?list=following').json()], ['adam'])
+        self.assertTrue(self.ewa.get('/api/people/?list=followers').json()[0]['mutual'])
+        r = self.ewa.delete('/api/users/adam/follow/').json()
+        self.assertEqual((r['i_follow'], r['followers']), (False, 0))
+
+    def test_wyszukiwanie_prywatnych_tylko_po_pelnej_nazwie(self):
+        self.publiczny(self.adam)
+        self.assertEqual([p['username'] for p in self.jan.get('/api/people/?q=ad').json()], ['adam'])
+        self.assertEqual(self.jan.get('/api/people/?q=ew').json(), [])                    # ewa prywatna
+        self.assertEqual([p['username'] for p in self.jan.get('/api/people/?q=EWA').json()], ['ewa'])
+
+    def test_zmiana_udostepnienia_w_historii(self):
+        self.publiczny(self.adam)
+        sid = trening(self.adam, self.ex, 100).json()['id']
+        self.assertEqual(self.adam.patch(f'/api/sessions/{sid}/share/', {'shared': False}, format='json').json()['shared'], False)
+        self.assertEqual(self.tablica(self.ewa), [])
+        self.assertEqual(self.ewa.patch(f'/api/sessions/{sid}/share/', {'shared': True}, format='json').status_code, 404)
+
+    def test_stronicowanie_i_liczba_zapytan(self):
+        self.publiczny(self.adam)
+        teraz = timezone.now().replace(microsecond=0)
+        for d in range(25):   # po 2 treningi o tej samej godzinie - granica strony wypada w środku pary
+            sesja(self.adam, self.ex, [(100, 5), (100, 5)], date_completed=(teraz - timedelta(days=d // 2)).isoformat())
+        with CaptureQueriesContext(connection) as q:
+            pierwsza = self.ewa.get('/api/feed/').json()
+        self.assertLess(len(q.captured_queries), 15)                                      # bez N+1
+        self.assertEqual(len(pierwsza['results']), 20)
+        druga = self.ewa.get('/api/feed/', {'before': pierwsza['next']}).json()
+        self.assertEqual(self.ewa.get(f"/api/feed/?before={pierwsza['next']}").json()['results'], druga['results'])
+        self.assertEqual((len(druga['results']), druga['next']), (5, None))
+        ids = [i['id'] for i in pierwsza['results'] + druga['results']]
+        self.assertEqual(len(set(ids)), 25)                                               # bez braków i powtórzeń

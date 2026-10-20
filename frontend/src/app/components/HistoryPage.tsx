@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ChevronDown, ChevronUp, Edit, History, ListPlus, Repeat, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Edit, Globe, History, ListPlus, Lock, Repeat, Trash2 } from "lucide-react";
+import { Switch } from "./ui/switch";
+import { toast } from "../../lib/toast";
 import { PlanComparison, Session, trainingApi, errorText } from "../../lib/api";
 import { estimate1RM } from "../../lib/oneRepMax";
 import { ErrorText, Page, Spinner } from "./common";
@@ -95,6 +97,17 @@ export function HistoryPage() {
     }
   };
 
+  const share = async (s: Session, shared: boolean) => {
+    setSessions((list) => list?.map((x) => (x.id === s.id ? { ...x, shared } : x)) ?? list);
+    try {
+      await trainingApi.shareSession(s.id, shared);
+      toast(shared ? "Trening udostępniony w Społeczności." : "Trening jest teraz prywatny.");
+    } catch (e) {
+      setSessions((list) => list?.map((x) => (x.id === s.id ? { ...x, shared: !shared } : x)) ?? list);
+      setError(errorText(e, "Nie udało się zmienić udostępnienia."));
+    }
+  };
+
   if (!sessions) return error ? <Page icon={History} title="Historia treningów"><ErrorText>{error}</ErrorText></Page> : <Spinner />;
 
   return (
@@ -110,8 +123,11 @@ export function HistoryPage() {
               <button type="button" aria-expanded={open === s.id} onClick={() => setOpen(open === s.id ? null : s.id)}
                 className="flex w-full items-start justify-between gap-2 rounded-xl px-6 py-5 text-left hover:bg-muted/40">
                 <div className="min-w-0">
-                  <CardTitle className="text-lg">
+                  <CardTitle className="flex items-center gap-2 text-lg">
                     {fmtLongDate(s.date_completed)}
+                    {s.shared
+                      ? <Globe className="h-3.5 w-3.5 text-primary" aria-label="Udostępniony w Społeczności" />
+                      : <Lock className="h-3.5 w-3.5 text-muted-foreground" aria-label="Prywatny" />}
                   </CardTitle>
                   <CardDescription>
                     {s.plan_title ? `${s.plan_title}${s.day_name ? ` · ${s.day_name}` : ""}` : "Trening bez planu"}
@@ -127,6 +143,10 @@ export function HistoryPage() {
               <CardContent className="space-y-4">
                 {s.plan_day && <Comparison id={s.id} />}
                 <SessionDetails s={s} />
+                <label className="flex cursor-pointer items-center gap-3 rounded-md bg-muted/50 p-3 text-sm">
+                  <Switch checked={!!s.shared} onCheckedChange={(v) => share(s, v)} aria-label="Udostępniony w Społeczności" />
+                  <span>{s.shared ? "Udostępniony w Społeczności" : "Prywatny - widzisz go tylko Ty"}</span>
+                </label>
                 <div className="flex flex-wrap gap-2">
                   <Button size="sm" onClick={() => navigate(`/trening?repeat=${s.id}`)}><Repeat className="mr-1 h-4 w-4" /> Powtórz</Button>
                   <Button size="sm" variant="outline" onClick={() => navigate(`/trening?edit=${s.id}`)}><Edit className="mr-1 h-4 w-4" /> Edytuj</Button>

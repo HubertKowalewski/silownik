@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
-from .. import analytics, avatars
+from .. import analytics, avatars, social
 from ..models import (
     Avatar,
     BodyArea,
@@ -206,7 +206,7 @@ class PasswordResetConfirmAPIView(AuthThrottleMixin, APIView):
 
 class PublicProfileAPIView(APIView):
     """Profil innego użytkownika według jego ustawień widoczności (WF-04, WF-21).
-    Profil niepubliczny zwraca 404, aby nie ujawniać istnienia konta."""
+    Profil prywatny pokazuje innym tylko nazwę, zdjęcie i stan obserwowania - bez planów i statystyk."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, username):
@@ -217,8 +217,16 @@ class PublicProfileAPIView(APIView):
             raise Http404
         ensure_profiles(user)
         own = user.id == request.user.id
-        if not own and not moderator and not user.profile.profile_public:
-            raise Http404
+        rel = social.relation(request.user, user)
+        # profil prywatny: inni widzą tylko nazwę i zdjęcie (żeby dało się obserwować i odwzajemnić
+        # obserwowanie); osoby obserwowane wzajemnie widzą także udostępnione treningi
+        full = own or moderator or user.profile.profile_public
+        if not full:
+            return Response({
+                'username': user.username, 'avatar_url': avatars.avatar_url_for(user), 'restricted': True,
+                'is_own': False, 'profile_public': False, 'relation': rel, 'counts': social.counts(user),
+                'can_see_workouts': rel['mutual'], 'plans': [], 'trainings': None,
+            })
         plans = user.created_plans.filter(is_public=True, is_hidden=False).order_by('-created_at')
         data = {
             'username': user.username,
@@ -227,6 +235,10 @@ class PublicProfileAPIView(APIView):
             'level': user.profile.get_level_display(),
             'goal': user.profile.get_goal_display(),
             'is_own': own,
+            'restricted': False,
+            'relation': rel,
+            'counts': social.counts(user),
+            'can_see_workouts': True,
             'profile_public': user.profile.profile_public,
             'trainings_public': user.profile.trainings_public,
             'plans': WorkoutPlanSerializer(plans, many=True, context={'request': request}).data,

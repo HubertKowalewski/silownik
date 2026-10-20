@@ -213,8 +213,8 @@ export function ProfilePage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Eye className="h-4 w-4" /> Prywatność</CardTitle>
           <CardDescription>
-            Decydujesz, co widzą inni użytkownicy. Dane o zdrowiu, pomiary ciała i notatki z treningów nigdy nie są
-            udostępniane. Wgląd autora planu w Twoje postępy ustawiasz osobno przy każdym sklonowanym planie.
+            Decydujesz, co widzą inni użytkownicy. Dane o zdrowiu, pomiary ciała, tętno i notatki z treningów nigdy
+            nie są udostępniane. Wgląd autora planu w Twoje postępy ustawiasz osobno przy każdym sklonowanym planie.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -223,6 +223,16 @@ export function ProfilePage() {
               onCheckedChange={(v) => set({ profile_public: v, ...(v ? {} : { trainings_public: false }) })} />
             Profil publiczny - inni widzą nazwę użytkownika, poziom, cel i opublikowane plany
           </label>
+          <label className="flex items-center gap-2 text-sm">
+            <Switch checked={profile.share_workouts_default} onCheckedChange={(v) => set({ share_workouts_default: v })} />
+            Udostępniaj nowe treningi w Społeczności (możesz zmienić przy każdym zapisie i w Historii)
+          </label>
+          <p className="rounded-md bg-muted/50 p-3 text-xs text-muted-foreground">
+            Udostępnione treningi (ćwiczenia, serie, czas, objętość) widzą {profile.profile_public
+              ? <strong className="text-foreground">wszyscy użytkownicy</strong>
+              : <strong className="text-foreground">tylko osoby, z którymi obserwujecie się wzajemnie</strong>}.
+            Notatki i tętno zawsze zostają prywatne.
+          </p>
           <label className={`flex items-center gap-2 text-sm ${profile.profile_public ? "" : "opacity-50"}`}>
             <Switch checked={profile.trainings_public} disabled={!profile.profile_public}
               onCheckedChange={(v) => set({ trainings_public: v })} />

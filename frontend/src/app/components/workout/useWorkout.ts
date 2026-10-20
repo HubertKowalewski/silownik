@@ -18,6 +18,7 @@ import {
 export type Summary = {
   queued: boolean; records: NewRecord[]; repRecords: NewRepRecord[];
   sets: number; tonnage: number; duration: number | null; edited: boolean;
+  shared: boolean; profilePublic: boolean;
 };
 
 type Range = { reps_min: number; reps_max?: number | null; rir?: number | null };
@@ -28,6 +29,8 @@ export function useWorkout() {
   const [prefs, setPrefs] = useState<RestPrefs>(() => storage.get(STORAGE.prefs, DEFAULT_PREFS));
   const [records, setRecords] = useState<Record<number, number>>(() => storage.get(STORAGE.records, {}));
   const [increment, setIncrement] = useState<number>(() => storage.get(STORAGE.increment, 2.5));
+  const [sharing, setSharing] = useState<{ byDefault: boolean; profilePublic: boolean }>(
+    () => storage.get(STORAGE.sharing, { byDefault: true, profilePublic: false }));
   const [scale, setScale] = useState<Scale>(() => storage.get<Scale>(STORAGE.scale, "rir"));
   // sposób zapisu serii wybrany ostatnio dla danego ćwiczenia (np. martwy ciąg zawsze z RIR)
   const [exerciseScales, setExerciseScales] = useState<Record<number, Scale>>(() => storage.get(STORAGE.exerciseScales, {}));
@@ -47,6 +50,9 @@ export function useWorkout() {
       setPrefs(next);
       setScale(p.effort_scale);
       setIncrement(p.load_increment);
+      const nextSharing = { byDefault: p.share_workouts_default, profilePublic: p.profile_public };
+      setSharing(nextSharing);
+      storage.set(STORAGE.sharing, nextSharing);
       storage.set(STORAGE.prefs, next);
       storage.set(STORAGE.scale, p.effort_scale);
       storage.set(STORAGE.increment, p.load_increment);
@@ -71,7 +77,7 @@ export function useWorkout() {
   // --- operacje na szkicu -------------------------------------------------------------
 
   const setTimer = (timer: TimerState | null) => setDraft((d) => ({ ...d, timer }));
-  const setField = (patch: Partial<Pick<Draft, "notes" | "hr">>) => setDraft((d) => ({ ...d, ...patch }));
+  const setField = (patch: Partial<Pick<Draft, "notes" | "hr" | "share">>) => setDraft((d) => ({ ...d, ...patch }));
   const setBlock = (bk: string, patch: Partial<Block>) =>
     setDraft((d) => ({ ...d, blocks: d.blocks.map((b) => (b.key === bk ? { ...b, ...patch } : b)) }));
   const updateSet = (bk: string, sk: string, patch: Partial<SetRow>) =>
@@ -225,6 +231,7 @@ export function useWorkout() {
     const hr = numOrNull(draft.hr);
     if (hr !== null && (hr < 30 || hr > 230)) return setError("Tętno poza zakresem 30-230.");
     const sets = setsPayload(done, scale);
+    const share = draft.share ?? sharing.byDefault;
     const duration = durationOf(draft);
     const notes = draft.notes.slice(0, 1000);
     setSaving(true);
@@ -236,11 +243,12 @@ export function useWorkout() {
       } else {
         const r = await saveOrQueue("session", {
           client_uuid: uuid(), plan: draft.planId, plan_day: draft.dayId, date_completed: new Date().toISOString(),
-          notes, post_workout_hr: hr, duration_seconds: duration, sets,
+          notes, post_workout_hr: hr, duration_seconds: duration, sets, shared: share,
         });
         result = { queued: r.status === "queued", records: r.data?.new_records ?? [], repRecords: r.data?.rep_records ?? [] };
       }
-      setSummary({ ...result, sets: sets.filter((s) => !s.is_warmup).length, tonnage, duration, edited: !!draft.editingId });
+      setSummary({ ...result, sets: sets.filter((s) => !s.is_warmup).length, tonnage, duration, edited: !!draft.editingId,
+        shared: share, profilePublic: sharing.profilePublic });
       setRecords((m) => ({ ...m, ...Object.fromEntries(result.records.map((r) => [r.exercise_id, r.current])) }));
       setDraft(emptyDraft());
     } catch (e) {
@@ -251,7 +259,7 @@ export function useWorkout() {
   };
 
   return {
-    exercises, plans, plan, prefs, records, scale, draft, setBlockScale, summary, error, saving, done, tonnage, totalSets,
+    exercises, plans, plan, prefs, records, scale, draft, setBlockScale, sharing, summary, error, saving, done, tonnage, totalSets,
     isBarbell, setError, setSummary, setTimer, setField, setBlock, updateSet, removeBlock, moveBlock, addSet,
     removeSet, confirmReplace, loadDay, loadSession, addExercise, swapExercise, completeSet, applySuggestion, addWarmup, reset, save,
   };

@@ -126,6 +126,12 @@ Delikatne gradienty: poświata tła, karta akcji, kafelki z liczbami, przycisk g
 Na telefonie nawigacja jest na dolnym pasku z przyciskiem „Trening” pośrodku. Tokeny kolorów: `src/styles/theme.css`.
 
 ## Najważniejsze funkcje
+- **Społeczność (treningi):** po zakończeniu treningu przełącznik „Udostępnij trening” (domyślne ustawienie
+  w profilu, zmiana później w Historii). Udostępniony trening przy profilu publicznym widzą wszyscy, przy
+  prywatnym - tylko osoby obserwowane wzajemnie; notatki i tętno nigdy nie są pokazywane. Strona
+  **Społeczność**: tablica „Wszystkie” (od najnowszych), „Obserwowani” i „Ludzie” (wyszukiwanie - profile
+  prywatne po pełnej nazwie, listy obserwowanych i obserwujących). Obserwowanie, „brawo” pod treningiem,
+  powiadomienia; zasady widoczności w `backend/training/social.py`.
 - **Asystent planu („Nowy plan” → „Z pomocnikiem”):** wybór podziału (Full Body, Upper/Lower, Push/Pull/Legs,
   Push/Pull), a dla każdej części jednostki (np. „wyciskanie na klatkę”, „przyciąganie pionowe”) kilka propozycji
   ćwiczeń uszeregowanych według ankiety zdrowotnej, dostępnego sprzętu i historii treningów. Nic nie jest narzucone:

@@ -70,7 +70,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
 /** Szablon strony: tytuł krojem „szyldowym”, opis i radełkowany pasek - wspólny dla wszystkich ekranów. */
 export function Page({ title, description, actions, icon: Icon, children }: {
   title: string;
-  description?: string;
+  description?: ReactNode;
   actions?: ReactNode;
   icon?: IconType;
   children: ReactNode;

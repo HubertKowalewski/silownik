@@ -143,7 +143,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['birth_year', 'sex', 'height_cm', 'level', 'goal', 'days_per_week', 'equipment',
                   'load_increment', 'default_rest_seconds', 'rest_step_seconds', 'rest_auto_start',
-                  'rest_sound', 'rest_vibrate', 'effort_scale', 'profile_public', 'trainings_public', 'health_consent', 'health_consent_date', 'restrictions',
+                  'rest_sound', 'rest_vibrate', 'effort_scale', 'profile_public', 'trainings_public', 'share_workouts_default', 'health_consent', 'health_consent_date', 'restrictions',
                   'health_notes']
         extra_kwargs = {
             'days_per_week': {'validators': [in_range(1, 7, 'Liczba dni musi mieścić się w zakresie 1-7.')]},
@@ -247,7 +247,7 @@ class WorkoutSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkoutSession
         fields = ['id', 'client_uuid', 'plan', 'plan_title', 'plan_day', 'day_name', 'date_completed',
-                  'notes', 'post_workout_hr', 'duration_seconds', 'sets', 'total_tonnage']
+                  'notes', 'post_workout_hr', 'duration_seconds', 'sets', 'total_tonnage', 'shared']
         extra_kwargs = {
             'client_uuid': {'validators': []}, 'date_completed': {'required': False},
             'post_workout_hr': {'validators': [in_range(30, 230, 'Tętno poza zakresem 30-230.')]},
@@ -279,7 +279,11 @@ class WorkoutSessionSerializer(serializers.ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         sets_data = validated_data.pop('sets', [])
-        session = WorkoutSession.objects.create(user=self.context['request'].user, **validated_data)
+        user = self.context['request'].user
+        if 'shared' not in validated_data:   # bez wyboru w aplikacji - ustawienie domyślne z profilu
+            profile = getattr(user, 'profile', None)
+            validated_data['shared'] = bool(getattr(profile, 'share_workouts_default', False))
+        session = WorkoutSession.objects.create(user=user, **validated_data)
         ExerciseSet.objects.bulk_create([ExerciseSet(session=session, **s) for s in sets_data])
         return session
 

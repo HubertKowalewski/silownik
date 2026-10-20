@@ -95,12 +95,32 @@ class UserProfile(models.Model):
     # widoczność dla innych użytkowników (WF-04); dane o zdrowiu nigdy nie są udostępniane
     profile_public = models.BooleanField(default=False)
     trainings_public = models.BooleanField(default=False)
+    # nowo zapisany trening jest domyślnie udostępniany (kto go zobaczy - patrz training/social.py)
+    share_workouts_default = models.BooleanField(default=True)
     # wersja zdjęcia profilowego (znacznik czasu) - część adresu obrazka, więc przeglądarka może go
     # trzymać w pamięci na stałe, a po zmianie zdjęcia pobiera nowe; None = brak zdjęcia
     avatar_version = models.PositiveBigIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f'Profil {self.user.username}'
+
+
+class Follow(models.Model):
+    """Obserwowanie użytkownika. Obserwowanie wzajemne daje wgląd w udostępnione treningi także
+    przy profilu prywatnym - odwzajemnienie jest zgodą obserwowanej osoby."""
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_set')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers_set')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['follower', 'following'], name='unique_follow'),
+            models.CheckConstraint(condition=~models.Q(follower=models.F('following')), name='no_self_follow'),
+        ]
+        indexes = [models.Index(fields=['following', 'follower'])]
+
+    def __str__(self):
+        return f'{self.follower_id} -> {self.following_id}'
 
 
 class Avatar(models.Model):
@@ -227,13 +247,28 @@ class WorkoutSession(models.Model):
     duration_seconds = models.PositiveIntegerField(null=True, blank=True)
     # identyfikator nadany na urządzeniu - chroni przed duplikatami przy synchronizacji (WN-04)
     client_uuid = models.UUIDField(null=True, blank=True, unique=True)
+    # udostępniony w Społeczności: przy profilu publicznym widzą go wszyscy, przy prywatnym tylko osoby
+    # obserwowane wzajemnie; nieudostępniony widzi wyłącznie właściciel
+    shared = models.BooleanField(default=False)
 
     class Meta:
         # historia, statystyki i raporty zawsze filtrują treningi użytkownika po dacie
-        indexes = [models.Index(fields=['user', '-date_completed'])]
+        indexes = [models.Index(fields=['user', '-date_completed']),
+                   # tablica Społeczności: udostępnione treningi od najnowszych
+                   models.Index(fields=['shared', '-date_completed'])]
 
     def __str__(self):
         return f"Trening {self.user.username} - {self.date_completed:%Y-%m-%d}"
+
+
+class Kudos(models.Model):
+    """„Brawo” pod udostępnionym treningiem innej osoby."""
+    session = models.ForeignKey('WorkoutSession', on_delete=models.CASCADE, related_name='kudos')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='kudos_given')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['session', 'user'], name='unique_kudos')]
 
 
 class ExerciseSet(models.Model):

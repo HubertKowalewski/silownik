@@ -79,6 +79,14 @@ class WorkoutSessionViewSet(IdempotentCreateMixin, viewsets.ModelViewSet):
         for exercise_id in exercise_ids:
             analytics.recompute_record(user, exercise_id)
 
+    @action(detail=True, methods=['patch'])
+    def share(self, request, pk=None):
+        """Udostępnienie treningu w Społeczności albo jego cofnięcie (bez przeliczania rekordów)."""
+        session = self.get_object()
+        session.shared = bool(request.data.get('shared'))
+        session.save(update_fields=['shared'])
+        return Response({'id': session.id, 'shared': session.shared})
+
     @action(detail=True, methods=['get'])
     def compare(self, request, pk=None):
         """Realizacja jednostki planu w tej sesji (WF-26)."""

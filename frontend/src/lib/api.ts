@@ -176,6 +176,7 @@ export type Profile = {
   effort_scale: "reps" | "rir" | "rpe";
   profile_public: boolean;
   trainings_public: boolean;
+  share_workouts_default: boolean;
   health_consent: boolean;
   health_consent_date: string | null;
   restrictions: number[];
@@ -298,6 +299,7 @@ export type SessionPayload = {
   post_workout_hr: number | null;
   duration_seconds: number | null;
   sets: LoggedSet[];
+  shared?: boolean;   // udostępniony w Społeczności (brak = ustawienie domyślne z profilu)
 };
 
 export type Session = Omit<SessionPayload, "client_uuid" | "sets"> & {
@@ -392,12 +394,16 @@ export type StrengthTest = {
 export type PublicProfile = {
   username: string;
   avatar_url?: string | null;
-  member_since: string;
-  level: string;
-  goal: string;
+  member_since?: string;
+  level?: string;
+  goal?: string;
   is_own: boolean;
+  restricted: boolean;          // profil prywatny oglądany przez kogoś innego - tylko nazwa i zdjęcie
+  relation: Relation;
+  counts: { followers: number; following: number };
+  can_see_workouts: boolean;
   profile_public: boolean;
-  trainings_public: boolean;
+  trainings_public?: boolean;
   plans: WorkoutPlan[];
   trainings: null | {
     total_sessions: number;
@@ -406,6 +412,31 @@ export type PublicProfile = {
     records: { exercise: string; e1rm: number }[];
   };
 };
+
+export type Relation = { is_self: boolean; i_follow: boolean; follows_me: boolean; mutual: boolean };
+
+/** Osoba na liście (wyszukiwanie, obserwowani, obserwujący). */
+export type Person = {
+  username: string; avatar_url: string | null; profile_public: boolean;
+  i_follow: boolean; follows_me: boolean; mutual: boolean;
+};
+
+/** Udostępniony trening na tablicy Społeczności. */
+export type FeedItem = {
+  id: number;
+  user: { username: string; avatar_url: string | null };
+  is_own: boolean;
+  date: string;
+  title: string;
+  plan_title: string | null;
+  duration_seconds: number | null;
+  tonnage: number;
+  sets: number;
+  exercises: { name: string; sets: string[] }[];
+  kudos: number;
+  my_kudos: boolean;
+};
+export type FeedPage = { results: FeedItem[]; next: string | null };
 
 export type Notification = { id: number; text: string; url: string; is_read: boolean; created_at: string };
 
@@ -632,6 +663,19 @@ export const trainingApi = {
 
   publicProfile: (username: string) => api.get<PublicProfile>(`/api/users/${encodeURIComponent(username)}/`),
   notifications: () => api.get<Notification[]>("/api/notifications/"),
+  feed: (tab: "all" | "following", before?: string | null) =>
+    api.get<FeedPage>(`/api/feed/?tab=${tab}${before ? `&before=${encodeURIComponent(before)}` : ""}`),
+  userWorkouts: (username: string, before?: string | null) =>
+    api.get<FeedPage>(`/api/users/${encodeURIComponent(username)}/workouts/${before ? `?before=${encodeURIComponent(before)}` : ""}`),
+  follow: (username: string) =>
+    api.post<Relation & { followers: number; following: number }>(`/api/users/${encodeURIComponent(username)}/follow/`),
+  unfollow: (username: string) =>
+    api.delete<Relation & { followers: number; following: number }>(`/api/users/${encodeURIComponent(username)}/follow/`),
+  people: (params: { q?: string; list?: "following" | "followers" }) =>
+    api.get<Person[]>(`/api/people/?${new URLSearchParams(params as Record<string, string>)}`),
+  kudos: (sessionId: number) => api.post<{ kudos: number; my_kudos: boolean }>(`/api/sessions/${sessionId}/kudos/`),
+  unkudos: (sessionId: number) => api.delete<{ kudos: number; my_kudos: boolean }>(`/api/sessions/${sessionId}/kudos/`),
+  shareSession: (id: number, shared: boolean) => api.patch<{ id: number; shared: boolean }>(`/api/sessions/${id}/share/`, { shared }),
   readNotifications: () => api.post<void>("/api/notifications/read/"),
 };
 

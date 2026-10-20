@@ -291,7 +291,8 @@ export function PlanDetails() {
   return (
     <Page icon={ClipboardList}
       title={plan.title}
-      description={`autor: ${plan.creator_name}${plan.parent_title ? ` · kopia planu „${plan.parent_title}” (${plan.parent_creator})` : ""}`}
+      description={<>autor: <Link className="font-medium underline-offset-2 hover:underline" to={`/uzytkownicy/${encodeURIComponent(plan.creator_name)}`}>{plan.creator_name}</Link>
+        {plan.parent_title ? ` · kopia planu „${plan.parent_title}” (${plan.parent_creator})` : ""}</>}
       actions={
         <div className="flex flex-wrap gap-2">
           {plan.is_owner ? (

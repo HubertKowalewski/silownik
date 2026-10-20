@@ -8,7 +8,7 @@
 // Logika: workout/useWorkout.ts, model danych: workout/model.ts.
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { Clock, Dumbbell, Save, Timer } from "lucide-react";
+import { Clock, Dumbbell, Globe, Lock, Save, Timer } from "lucide-react";
 import { trainingApi, errorText } from "../../lib/api";
 import { fmtDateTime, fmtKg } from "../../lib/format";
 import { useWakeLock } from "../../lib/hooks";
@@ -18,6 +18,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Switch } from "./ui/switch";
 import { ExerciseBlockCard } from "./workout/ExerciseBlockCard";
 import { Elapsed, ManualRest, PlanDayPicker } from "./workout/StartPanels";
 import { useWorkout } from "./workout/useWorkout";
@@ -113,6 +114,26 @@ export function WorkoutLogger() {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {active && !draft.editingId && (
+        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-card p-4">
+          <Switch checked={draft.share ?? w.sharing.byDefault} onCheckedChange={(v) => w.setField({ share: v })}
+            aria-label="Udostępnij trening" className="mt-0.5" />
+          <span className="min-w-0 text-sm">
+            <span className="flex items-center gap-1.5 font-medium">
+              {(draft.share ?? w.sharing.byDefault) ? <Globe className="h-4 w-4 text-primary" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
+              Udostępnij trening w Społeczności
+            </span>
+            <span className="block text-xs text-muted-foreground">
+              {(draft.share ?? w.sharing.byDefault)
+                ? w.sharing.profilePublic
+                  ? "Zobaczą go wszyscy (masz profil publiczny). Notatki i tętno zostają tylko dla Ciebie."
+                  : "Zobaczą go osoby, z którymi obserwujecie się wzajemnie. Notatki i tętno zostają tylko dla Ciebie."
+                : "Trening zobaczysz tylko Ty."}
+            </span>
+          </span>
+        </label>
       )}
 
       <ErrorText>{w.error}</ErrorText>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { exerciseName, fmtDate, fmtNumber, fmtSet, numOrNull, plural } from "./format";
+import { exerciseName, fmtAgo, fmtDate, fmtNumber, fmtSet, numOrNull, plural } from "./format";
 
 describe("formatowanie", () => {
   it("parsuje pola liczbowe z przecinkiem", () => {
@@ -24,5 +24,14 @@ describe("formatowanie", () => {
   it("dzieli nazwę ćwiczenia na polską i angielską", () => {
     expect(exerciseName("Wyciskanie leżąc / Bench Press")).toEqual({ pl: "Wyciskanie leżąc", en: "Bench Press" });
     expect(exerciseName("Przysiad")).toEqual({ pl: "Przysiad", en: "" });
+  });
+
+  it("czas względny na tablicy", () => {
+    const now = new Date(2026, 9, 20, 16, 0);
+    expect(fmtAgo(new Date(2026, 9, 20, 15, 59, 40), now)).toBe("przed chwilą");
+    expect(fmtAgo(new Date(2026, 9, 20, 15, 45), now)).toBe("15 min temu");
+    expect(fmtAgo(new Date(2026, 9, 20, 13, 0), now)).toBe("3 godz. temu");
+    expect(fmtAgo(new Date(2026, 9, 19, 18, 4), now)).toBe("wczoraj, 18:04");
+    expect(fmtAgo(new Date(2026, 9, 12, 18, 4), now)).toMatch(/^12 paź.*, 18:04$/);
   });
 });

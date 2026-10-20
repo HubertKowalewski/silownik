@@ -1,7 +1,7 @@
 // Ekran po zapisaniu treningu: serie, objętość, czas i nowe rekordy.
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { Check, Clock, Dumbbell, TrendingUp, Trophy } from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import { Check, Clock, Dumbbell, Globe, Lock, TrendingUp, Trophy } from "lucide-react";
 import { fmtKg, fmtNumber } from "../../../lib/format";
 import { Page, StatTile } from "../common";
 import { fmtClock } from "../RestTimer";
@@ -28,6 +28,17 @@ export function WorkoutSummary({ summary, onNew }: { summary: Summary; onNew: ()
             <StatTile compact label="Objętość" icon={Trophy} tone={1} value={fmtNumber(summary.tonnage, 0)} unit="kg" />
             <StatTile compact label="Czas" icon={Clock} tone={2} value={summary.duration ? fmtClock(summary.duration) : "–"} />
           </div>
+          {!summary.edited && (
+            <p className="flex items-start gap-2 rounded-md bg-muted/50 p-3 text-sm">
+              {summary.shared ? <Globe className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> : <Lock className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />}
+              <span>
+                {summary.shared
+                  ? <>Udostępniono w Społeczności - {summary.profilePublic ? "widzą go wszyscy" : "widzą go osoby, z którymi obserwujecie się wzajemnie"}.{" "}
+                      <Link to="/spolecznosc" className="font-medium text-primary underline">Zobacz tablicę</Link></>
+                  : "Trening prywatny - widzisz go tylko Ty. Udostępnić możesz go później w Historii."}
+              </span>
+            </p>
+          )}
           {summary.records.length > 0 && (
             <div className="space-y-2 rounded-md border border-primary/40 bg-primary/5 p-3">
               <p className="flex items-center gap-2 font-medium"><Trophy className="h-4 w-4 text-primary" /> Nowe rekordy 1RM</p>

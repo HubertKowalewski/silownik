@@ -56,3 +56,20 @@ export function exerciseName(name: string | null | undefined): { pl: string; en:
   const [pl, ...rest] = (name ?? "").split(" / ");
   return { pl: pl.trim(), en: rest.join(" / ").trim() };
 }
+
+/** Czas względny na tablicy: „przed chwilą”, „15 min temu”, „3 godz. temu”, „wczoraj, 18:04”, „12.10, 18:04”. */
+export function fmtAgo(value: string | Date, now = new Date()) {
+  const d = new Date(value);
+  const minutes = Math.floor((now.getTime() - d.getTime()) / 60000);
+  const time = d.toLocaleTimeString(LOCALE, { hour: "2-digit", minute: "2-digit" });
+  if (minutes < 1) return "przed chwilą";
+  if (minutes < 60) return `${minutes} min temu`;
+  const sameDay = (a: Date, b: Date) => a.toDateString() === b.toDateString();
+  if (sameDay(d, now) && minutes < 12 * 60) return `${Math.floor(minutes / 60)} godz. temu`;
+  if (sameDay(d, now)) return `dziś, ${time}`;
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (sameDay(d, yesterday)) return `wczoraj, ${time}`;
+  const date = d.toLocaleDateString(LOCALE, { day: "numeric", month: "short", ...(d.getFullYear() !== now.getFullYear() ? { year: "numeric" } : {}) });
+  return `${date}, ${time}`;
+}

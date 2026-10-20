@@ -38,9 +38,11 @@ export type Draft = {
   startedAt: string;
   duration: number | null;   // przy edycji - zachowany czas oryginalnego treningu
   timer: TimerState | null;
+  share?: boolean;           // udostępnienie w Społeczności; brak wyboru = ustawienie domyślne z profilu
 };
 
 export const STORAGE = {
+  sharing: "sharing",   // { byDefault, profilePublic } z profilu - działa też offline
   draft: "workout-draft", prefs: "rest-prefs", scale: "effort-scale", records: "records", increment: "increment",
   exerciseScales: "exercise-scales",   // zapamiętany sposób zapisu dla konkretnych ćwiczeń
 };
