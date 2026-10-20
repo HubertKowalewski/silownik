@@ -1140,3 +1140,41 @@ class PrzeniesieniePrzezChmureTest(TestCase):
     def test_zly_adres(self):
         with self.assertRaisesMessage(CommandError, 'postgresql://'):
             call_command('przenies_do_chmury', cel='mysql://x', stdout=StringIO())
+
+
+class PlikiStatyczneTest(TestCase):
+    """Pliki, do których odwołuje się strona, muszą istnieć w repozytorium (inaczej wdrożenie się sypie)."""
+
+    def test_pliki_z_szablonu_i_manifestu_pwa_sa_w_repozytorium(self):
+        import json
+        import re
+        from pathlib import Path
+
+        from django.conf import settings
+        public = Path(settings.BASE_DIR).parent / 'frontend' / 'public'
+        template = (Path(settings.BASE_DIR) / 'training' / 'templates' / 'training' / 'react_app.html').read_text(encoding='utf-8')
+        used = re.findall(r"\{% static 'dist/([^']+\.[a-z0-9]+)' %\}", template)
+        manifest = json.loads((public / 'manifest.webmanifest').read_text(encoding='utf-8'))
+        icons = [i['src'] for i in manifest['icons']] + [i['src'] for s in manifest.get('shortcuts', []) for i in s.get('icons', [])]
+        used += [src.removeprefix('/static/dist/') for src in icons]
+        self.assertIn('icons/favicon-32.png', used)
+        missing = [f for f in set(used) if not (public / f).is_file()]
+        self.assertEqual(missing, [], f'Brak plików w frontend/public: {missing}')
+
+    def test_brak_pliku_w_manifescie_nie_wywraca_strony(self):
+        import tempfile
+
+        from core.storage import StaticStorage
+        with tempfile.TemporaryDirectory() as tmp:
+            storage = StaticStorage(location=tmp, base_url='/static/')
+            with self.assertLogs('core.storage', level='WARNING'):
+                self.assertEqual(storage.url('dist/icons/nie-ma.png'), '/static/dist/icons/nie-ma.png')
+
+    def test_robots_i_favicon(self):
+        c = APIClient()
+        r = c.get('/robots.txt')
+        self.assertEqual((r.status_code, r['Content-Type']), (200, 'text/plain'))
+        self.assertIn('Disallow: /api/', r.content.decode())
+        r = c.get('/favicon.ico')
+        self.assertEqual(r.status_code, 301)
+        self.assertTrue(r['Location'].endswith('icons/favicon-32.png'))

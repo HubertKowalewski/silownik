@@ -69,6 +69,8 @@ urlpatterns = [
     # PWA - service worker musi być serwowany z katalogu głównego
     path('sw.js', views.service_worker, name='service_worker'),
     path('manifest.webmanifest', views.web_manifest, name='web_manifest'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('favicon.ico', views.favicon, name='favicon'),
 
     # React SPA - wszystkie pozostałe adresy obsługuje router po stronie przeglądarki
     re_path(r'^(?!api/|admin/|static/).*$', views.SPAView.as_view(), name='spa'),

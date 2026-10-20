@@ -116,7 +116,7 @@ STORAGES = {
     'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
     # pliki z hashem w nazwie + gzip/brotli; w testach zwykły magazyn (bez collectstatic)
     'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage' if DEBUG or 'test' in sys.argv
-                    else 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+                    else 'core.storage.StaticStorage'},
 }
 
 # Lokalnie (DEBUG) pliki statyczne są czytane bezpośrednio z katalogów źródłowych - bez collectstatic

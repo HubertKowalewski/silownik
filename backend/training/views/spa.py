@@ -5,7 +5,8 @@ from pathlib import Path
 
 from django.conf import settings
 from django.db import connection
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse, HttpResponsePermanentRedirect, JsonResponse
+from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
@@ -51,6 +52,16 @@ def service_worker(request):
     response['Service-Worker-Allowed'] = '/'
     response['Cache-Control'] = 'no-cache'
     return response
+
+
+def robots_txt(request):
+    """Wyszukiwarki mogą odwiedzić stronę logowania; API i panel administratora są wyłączone z indeksowania."""
+    return HttpResponse('User-agent: *\nDisallow: /api/\nDisallow: /admin/\n', content_type='text/plain')
+
+
+def favicon(request):
+    """Przeglądarki pytają o /favicon.ico niezależnie od <link rel="icon"> - przekierowanie na ikonę PNG."""
+    return HttpResponsePermanentRedirect(static('dist/icons/favicon-32.png'))
 
 
 def web_manifest(request):
