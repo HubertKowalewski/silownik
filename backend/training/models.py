@@ -95,9 +95,23 @@ class UserProfile(models.Model):
     # widoczność dla innych użytkowników (WF-04); dane o zdrowiu nigdy nie są udostępniane
     profile_public = models.BooleanField(default=False)
     trainings_public = models.BooleanField(default=False)
+    # wersja zdjęcia profilowego (znacznik czasu) - część adresu obrazka, więc przeglądarka może go
+    # trzymać w pamięci na stałe, a po zmianie zdjęcia pobiera nowe; None = brak zdjęcia
+    avatar_version = models.PositiveBigIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f'Profil {self.user.username}'
+
+
+class Avatar(models.Model):
+    """Zdjęcie profilowe: kwadrat 256×256 px w formacie WebP (kilkanaście KB), przechowywany w bazie danych -
+    darmowy hosting nie ma trwałego dysku, a baza przenosi się razem z resztą danych."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='avatar')
+    image = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Zdjęcie {self.user_id}'
 
 
 class HealthProfile(models.Model):

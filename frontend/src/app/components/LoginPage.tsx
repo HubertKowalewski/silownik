@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { useAuth } from "./AuthProvider";
 import { errorText } from "../../lib/api";
 import { AuthShell } from "./common";
+import { PasswordInput } from "./ui/password-input";
 
 export function LoginPage() {
   const { login, register } = useAuth();
@@ -100,9 +101,8 @@ export function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Hasło</Label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 value={form.password}
                 onChange={set("password")}
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
@@ -113,9 +113,8 @@ export function LoginPage() {
             {mode === "register" && (
               <div className="space-y-2">
                 <Label htmlFor="password2">Powtórz hasło</Label>
-                <Input
+                <PasswordInput
                   id="password2"
-                  type="password"
                   value={form.password2}
                   onChange={set("password2")}
                   autoComplete="new-password"

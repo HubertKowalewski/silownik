@@ -16,6 +16,7 @@ import { ErrorText, NativeSelect, Page, Spinner } from "./common";
 import { fmtDate, fmtDateTime, fmtKg, plural } from "../../lib/format";
 import { useMeta } from "../../lib/hooks";
 import { ExerciseName } from "./ExerciseName";
+import { Avatar } from "./Avatar";
 
 function ForkPanel({ plan, onClose }: { plan: WorkoutPlan; onClose: () => void }) {
   const navigate = useNavigate();
@@ -155,8 +156,11 @@ function Consultation({ plan }: { plan: WorkoutPlan }) {
   const replies = (id: number) => thread?.comments.filter((c) => c.parent === id) ?? [];
   const Item = ({ c, nested }: { c: PlanComment; nested?: boolean }) => (
     <div className={`rounded-md border border-border p-3 text-sm ${nested ? "ml-6 bg-muted/40" : ""}`}>
-      <div className="mb-1 flex items-center gap-2 text-xs text-muted-foreground">
-        <strong className="text-foreground">{c.author_name}</strong>
+      <div className="mb-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+        <Link to={`/uzytkownicy/${encodeURIComponent(c.author_name)}`} className="flex items-center gap-1.5 hover:underline">
+          <Avatar name={c.author_name} url={c.author_avatar} size="xs" />
+          <strong className="text-foreground">{c.author_name}</strong>
+        </Link>
         {c.is_plan_author && <Badge variant="secondary">autor planu</Badge>}
         {fmtDateTime(c.created_at)}
         <span className="ml-auto flex gap-1">

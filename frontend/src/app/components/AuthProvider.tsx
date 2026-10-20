@@ -20,6 +20,8 @@ type AuthContextValue = {
     password2: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  /** Zmiana danych zalogowanego użytkownika bez ponownego pobierania (np. nowe zdjęcie profilowe). */
+  updateUser: (patch: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -47,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     login: async (username, password) => setUser(await authApi.login(username, password)),
     register: async (payload) => setUser(await authApi.register(payload)),
+    updateUser: (patch) => setUser(user ? { ...user, ...patch } : null),
     logout: async () => {
       await authApi.logout();
       // dane poprzedniego konta zapisane w urządzeniu (1RM, ustawienia ćwiczeń) - nie dla kolejnej osoby

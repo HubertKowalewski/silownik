@@ -119,7 +119,10 @@ export function uuid(): string {
 
 // --- Typy ---------------------------------------------------------------
 
-export type User = { id: number; username: string; email: string; first_name: string; is_staff: boolean };
+export type User = {
+  id: number; username: string; email: string; first_name: string; is_staff: boolean;
+  avatar_url?: string | null;   // zdjęcie profilowe (adres z wersją) albo brak - wtedy inicjały
+};
 export type Option = { value: string; label: string };
 export type BodyArea = { id: number; code: string; name: string };
 export type Meta = {
@@ -260,6 +263,7 @@ export type PlanComment = {
   id: number;
   plan: number;
   author_name: string;
+  author_avatar?: string | null;
   is_plan_author: boolean;
   parent: number | null;
   text: string;
@@ -387,6 +391,7 @@ export type StrengthTest = {
 
 export type PublicProfile = {
   username: string;
+  avatar_url?: string | null;
   member_since: string;
   level: string;
   goal: string;
@@ -446,6 +451,18 @@ export type Stats = {
 };
 
 // --- Endpointy ----------------------------------------------------------
+
+/** Wysyłka pliku (multipart, pole „file”) - poza wspólnym klientem JSON. */
+async function uploadFile<T>(path: string, file: Blob, name?: string): Promise<T> {
+  await fetch("/api/auth/csrf/", { credentials: "same-origin" });
+  const token = document.cookie.match(/csrftoken=([^;]+)/)?.[1] ?? "";
+  const body = new FormData();
+  body.append("file", file, name ?? (file instanceof File ? file.name : "plik"));
+  const r = await fetch(path, { method: "POST", body, credentials: "same-origin", headers: { "X-CSRFToken": token } });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new ApiError(r.status, data.detail ?? `Błąd ${r.status}`, data);
+  return data as T;
+}
 
 export const authApi = {
   me: () => api.get<User | null>("/api/auth/me/"),
@@ -556,17 +573,9 @@ export const trainingApi = {
   goals: () => api.get<Goal[]>("/api/goals/"),
   createGoal: (payload: { exercise: number; target_1rm: number; deadline: string | null }) => api.post<Goal>("/api/goals/", payload),
   deleteGoal: (id: number) => api.delete<void>(`/api/goals/${id}/`),
-  importCsv: async (file: File) => {
-    // wysyłka pliku (multipart) - poza wspólnym klientem JSON
-    await fetch("/api/auth/csrf/", { credentials: "same-origin" });
-    const token = document.cookie.match(/csrftoken=([^;]+)/)?.[1] ?? "";
-    const body = new FormData();
-    body.append("file", file);
-    const r = await fetch("/api/import/", { method: "POST", body, credentials: "same-origin", headers: { "X-CSRFToken": token } });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) throw new ApiError(r.status, data.detail ?? `Błąd ${r.status}`, data);
-    return data as ImportResult;
-  },
+  importCsv: (file: File) => uploadFile<ImportResult>("/api/import/", file),
+  uploadAvatar: (file: Blob, name = "zdjecie.jpg") => uploadFile<{ avatar_url: string }>("/api/profile/avatar/", file, name),
+  deleteAvatar: () => api.delete<void>("/api/profile/avatar/"),
   saveSession: (payload: SessionPayload) =>
     api.post<Session & { new_records: NewRecord[]; rep_records: NewRepRecord[] }>("/api/sessions/", payload),
   updateSession: (id: number, payload: Partial<SessionPayload>) =>

@@ -11,13 +11,15 @@ from django.middleware.csrf import get_token
 from django.utils import timezone
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
-from .. import analytics
+from .. import analytics, avatars
 from ..models import (
+    Avatar,
     BodyArea,
     Equipment,
     Exercise,
@@ -220,6 +222,7 @@ class PublicProfileAPIView(APIView):
         plans = user.created_plans.filter(is_public=True, is_hidden=False).order_by('-created_at')
         data = {
             'username': user.username,
+            'avatar_url': avatars.avatar_url_for(user),
             'member_since': user.date_joined.date().isoformat(),
             'level': user.profile.get_level_display(),
             'goal': user.profile.get_goal_display(),
@@ -317,3 +320,40 @@ class NotificationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def read(self, request):
         Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
         return Response(status=204)
+
+
+# =============================================================================
+#  ZDJĘCIE PROFILOWE
+# =============================================================================
+
+class AvatarAPIView(APIView):
+    """Wysłanie (POST, pole „file”) i usunięcie (DELETE) własnego zdjęcia profilowego."""
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
+
+    def post(self, request):
+        upload = request.FILES.get('file')
+        if not upload:
+            return Response({'detail': 'Wybierz plik ze zdjęciem.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            url = avatars.save(request.user, upload)
+        except avatars.AvatarError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'avatar_url': url})
+
+    def delete(self, request):
+        avatars.remove(request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def avatar_image(request, user_id):
+    """Obrazek zdjęcia profilowego (dla zalogowanych). Adres zawiera wersję (?v=...), więc
+    przeglądarka może trzymać go w pamięci na stałe - po zmianie zdjęcia zmienia się adres."""
+    if not request.user.is_authenticated:
+        return HttpResponse(status=403)
+    avatar = Avatar.objects.filter(user_id=user_id).first()
+    if not avatar:
+        raise Http404
+    response = HttpResponse(bytes(avatar.image), content_type='image/webp')
+    response['Cache-Control'] = 'private, max-age=31536000, immutable'
+    return response

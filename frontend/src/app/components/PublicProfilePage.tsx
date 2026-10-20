@@ -10,6 +10,7 @@ import { ErrorText, Page, Spinner } from "./common";
 import { fmtDate, fmtKg } from "../../lib/format";
 import { PlanCard } from "./PlansPage";
 import { useMeta } from "../../lib/hooks";
+import { Avatar } from "./Avatar";
 
 export function PublicProfilePage() {
   const { username = "" } = useParams();
@@ -28,6 +29,13 @@ export function PublicProfilePage() {
 
   return (
     <Page icon={UserCircle} title={profile.username} description={`W serwisie od ${fmtDate(profile.member_since)} · ${profile.level} · cel: ${profile.goal.toLowerCase()}`}>
+      <div className="flex items-center gap-4">
+        <Avatar name={profile.username} url={profile.avatar_url} size="xl" className="ring-4 ring-primary/15" />
+        <div className="min-w-0">
+          <p className="font-display text-2xl font-bold leading-tight">{profile.username}</p>
+          <p className="text-sm text-muted-foreground">{profile.level} · {profile.goal}</p>
+        </div>
+      </div>
       {profile.is_own && (
         <p className="rounded-md border border-border bg-muted/40 p-3 text-sm">
           Tak Twój profil widzą inni użytkownicy{profile.profile_public ? "" : " - obecnie jest prywatny i nikt poza Tobą go nie widzi"}.

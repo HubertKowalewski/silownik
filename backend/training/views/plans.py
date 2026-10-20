@@ -258,7 +258,7 @@ class WorkoutPlanViewSet(viewsets.ModelViewSet):
         # wątek konsultacji prowadzony jest przy planie oryginalnym
         thread_plan = plan.parent_plan if plan.parent_plan_id and plan.creator_id == request.user.id else plan
         if request.method == 'GET':
-            qs = thread_plan.comments.filter(is_hidden=False).select_related('author', 'plan')
+            qs = thread_plan.comments.filter(is_hidden=False).select_related('author__profile', 'plan')
             return Response({'plan_id': thread_plan.id, 'plan_title': thread_plan.title,
                              'comments': PlanCommentSerializer(qs, many=True).data})
         serializer = PlanCommentSerializer(data=request.data)

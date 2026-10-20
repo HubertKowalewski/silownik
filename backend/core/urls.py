@@ -33,6 +33,8 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('api/users/<str:username>/', views.PublicProfileAPIView.as_view(), name='public_profile'),
     path('api/profile/', views.ProfileAPIView.as_view(), name='profile'),
+    path('api/profile/avatar/', views.AvatarAPIView.as_view(), name='profile_avatar'),
+    path('api/avatars/<int:user_id>/', views.avatar_image, name='avatar_image'),
     path('api/meta/', views.MetaAPIView.as_view(), name='meta'),
 
     # dokumentacja API (OpenAPI); strona Swagger UI zawiera skrypt inline, stąd łagodniejsza polityka CSP

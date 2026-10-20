@@ -1178,3 +1178,59 @@ class PlikiStatyczneTest(TestCase):
         r = c.get('/favicon.ico')
         self.assertEqual(r.status_code, 301)
         self.assertTrue(r['Location'].endswith('icons/favicon-32.png'))
+
+
+class ZdjecieProfiloweTest(TestCase):
+    def obraz(self, w=640, h=480, fmt='JPEG', exif_orientation=None):
+        from io import BytesIO
+
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+        buf = BytesIO()
+        img = Image.new('RGB', (w, h), (120, 60, 200))
+        kwargs = {}
+        if exif_orientation:
+            exif = Image.Exif()
+            exif[0x0112] = exif_orientation
+            kwargs['exif'] = exif
+        img.save(buf, fmt, **kwargs)
+        return SimpleUploadedFile(f'zdjecie.{fmt.lower()}', buf.getvalue(), content_type=f'image/{fmt.lower()}')
+
+    def test_wyslanie_kadrowanie_i_wyswietlanie(self):
+        from io import BytesIO
+
+        from PIL import Image
+        c = klient('ola')
+        self.assertIsNone(c.get('/api/auth/me/').json()['avatar_url'])
+        r = c.post('/api/profile/avatar/', {'file': self.obraz(640, 480, exif_orientation=6)}, format='multipart')
+        self.assertEqual(r.status_code, 200, r.content)
+        url = r.json()['avatar_url']
+        self.assertTrue(url.startswith('/api/avatars/'))
+        self.assertEqual(c.get('/api/auth/me/').json()['avatar_url'], url)
+        img = c.get(url)
+        self.assertEqual((img.status_code, img['Content-Type']), (200, 'image/webp'))
+        self.assertIn('immutable', img['Cache-Control'])
+        self.assertEqual(Image.open(BytesIO(img.content)).size, (256, 256))   # kwadrat 256 px
+        self.assertLess(len(img.content), 20_000)
+        self.assertEqual(APIClient().get(url).status_code, 403)                # tylko dla zalogowanych
+        self.assertEqual(klient('ewa').get(url).status_code, 200)               # inni zalogowani widzą
+
+    def test_odrzuca_plik_niebedacy_obrazem(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        c = klient('ola')
+        r = c.post('/api/profile/avatar/', {'file': SimpleUploadedFile('a.jpg', b'to nie obraz')}, format='multipart')
+        self.assertEqual(r.status_code, 400)
+        self.assertIn('obraz', r.json()['detail'])
+        self.assertEqual(c.post('/api/profile/avatar/', {}, format='multipart').status_code, 400)
+
+    def test_usuniecie_i_widocznosc_w_komentarzach(self):
+        c = klient('ola')
+        url = c.post('/api/profile/avatar/', {'file': self.obraz(fmt='PNG')}, format='multipart').json()['avatar_url']
+        ex = cwiczenie()
+        plan = c.post('/api/plans/', {**plan_payload(ex, 'kg', 50), 'is_public': True}, format='json').json()
+        c.post(f'/api/plans/{plan["id"]}/comments/', {'text': 'Mój komentarz'}, format='json')
+        komentarze = c.get(f'/api/plans/{plan["id"]}/comments/').json()['comments']
+        self.assertEqual(komentarze[0]['author_avatar'], url)
+        self.assertEqual(c.delete('/api/profile/avatar/').status_code, 204)
+        self.assertIsNone(c.get('/api/auth/me/').json()['avatar_url'])
+        self.assertEqual(c.get(url).status_code, 404)

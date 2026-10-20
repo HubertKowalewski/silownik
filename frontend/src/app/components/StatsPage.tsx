@@ -158,7 +158,7 @@ export function StatsPage() {
             <StatTile label="Tygodni z rzędu" icon={Flame} tone={1} value={stats.load.streak_weeks} />
             <StatTile label="Treningów / tydzień" icon={CalendarDays} tone={2}
               value={`${fmtNumber(stats.load.sessions_per_week_4w)}${stats.load.target_per_week ? ` / ${stats.load.target_per_week}` : ""}`} hint="średnio z 4 tygodni" />
-            <StatTile label="Objętość 7 dni" icon={Weight} tone={0} value={`${fmtNumber(stats.load.acute_tonnage / 1000)} t`} />
+            <StatTile label="Objętość 7 dni" icon={Weight} tone={0} value={fmtNumber(stats.load.acute_tonnage, 0)} unit="kg" />
           </div>
           <p className="text-sm">{stats.load.zone_text}</p>
           <div>

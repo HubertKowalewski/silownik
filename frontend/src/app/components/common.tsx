@@ -100,6 +100,13 @@ export function Page({ title, description, actions, icon: Icon, children }: {
 }
 
 /** Kafelek z liczbą: etykieta, duża liczba krojem tytułowym, podpowiedź. */
+/** Wielkość liczby w kafelku: długie wartości (np. „13 932 kg”) mniejszą czcionką, żeby mieściły się na telefonie. */
+function numeralSize(value: ReactNode, unit: string | undefined, compact?: boolean) {
+  const length = typeof value === "string" || typeof value === "number" ? String(value).length + (unit ? unit.length + 1 : 0) : 0;
+  if (compact) return length > 6 ? "text-[1.2rem] sm:text-[1.6rem] md:text-[2rem]" : "text-[1.6rem] md:text-[2.2rem]";
+  return length > 8 ? "text-[1.6rem] md:text-[2rem]" : "text-[2rem] md:text-[2.4rem]";
+}
+
 export function StatTile({ label, value, unit, hint, icon: Icon, compact }: {
   label: string;
   value: ReactNode;
@@ -114,7 +121,7 @@ export function StatTile({ label, value, unit, hint, icon: Icon, compact }: {
       <div className="flex min-w-0 items-start gap-1.5 text-xs leading-tight text-muted-foreground">
         {Icon && <Icon className={cn("mt-px h-3.5 w-3.5 shrink-0", compact && "hidden sm:block")} />} <span className="min-w-0">{label}</span>
       </div>
-      <div className={cn("numeral mt-2 whitespace-nowrap text-foreground", compact ? "text-[1.6rem] md:text-[2.2rem]" : "text-[2rem] md:text-[2.4rem]")}>
+      <div className={cn("numeral mt-2 whitespace-nowrap text-foreground", numeralSize(value, unit, compact))}>
         {value}{unit && <span className="ml-1 text-[0.55em] text-muted-foreground">{unit}</span>}
       </div>
       {hint && <div className="mt-1.5 text-xs text-muted-foreground">{hint}</div>}

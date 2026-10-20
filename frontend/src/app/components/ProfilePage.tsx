@@ -16,6 +16,8 @@ import { useAuth } from "./AuthProvider";
 import { fmtClock, REST_PRESETS } from "./RestTimer";
 import { fmtDateTime, numOrNull } from "../../lib/format";
 import { toast } from "../../lib/toast";
+import { PasswordInput } from "./ui/password-input";
+import { AvatarCard } from "./AvatarCard";
 
 export function ProfilePage() {
   const { user, logout } = useAuth();
@@ -114,6 +116,7 @@ export function ProfilePage() {
   return (
     <Page icon={UserCog} title="Profil" description="Dane wykorzystywane przy doborze planu i przeliczaniu obciążeń."
       actions={<Button variant="outline" asChild><Link to="/ankieta"><ClipboardCheck className="mr-2 h-4 w-4" /> Oceń aplikację</Link></Button>}>
+      <AvatarCard />
       <Card>
         <CardHeader>
           <CardTitle>Profil treningowy</CardTitle>
@@ -190,15 +193,15 @@ export function ProfilePage() {
         </CardContent>
         <CardContent className="flex flex-wrap items-end gap-2 border-t border-border pt-4">
           <Field label="Obecne hasło">
-            <Input className="w-48" type="password" autoComplete="current-password" value={pw.old_password}
+            <PasswordInput className="w-48" autoComplete="current-password" value={pw.old_password}
               onChange={(e) => setPw({ ...pw, old_password: e.target.value })} />
           </Field>
           <Field label="Nowe hasło">
-            <Input className="w-48" type="password" autoComplete="new-password" value={pw.new_password}
+            <PasswordInput className="w-48" autoComplete="new-password" value={pw.new_password}
               onChange={(e) => setPw({ ...pw, new_password: e.target.value })} />
           </Field>
           <Field label="Powtórz nowe hasło">
-            <Input className="w-48" type="password" autoComplete="new-password" value={pw.new_password2}
+            <PasswordInput className="w-48" autoComplete="new-password" value={pw.new_password2}
               onChange={(e) => setPw({ ...pw, new_password2: e.target.value })} />
           </Field>
           <Button variant="outline" onClick={changePassword} disabled={!pw.old_password || !pw.new_password}>Zmień hasło</Button>
@@ -357,7 +360,7 @@ export function ProfilePage() {
           </Button>
           <div className="flex items-end gap-2">
             <Field label="Hasło (potwierdzenie usunięcia)">
-              <Input type="password" value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)} />
+              <PasswordInput value={deletePassword} onChange={(e) => setDeletePassword(e.target.value)} />
             </Field>
             <Button variant="destructive" disabled={!deletePassword} onClick={deleteAccount}>
               <Trash2 className="mr-2 h-4 w-4" /> Usuń konto

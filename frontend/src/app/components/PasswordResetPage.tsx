@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { authApi, errorText } from "../../lib/api";
 import { ErrorText, Field } from "./common";
 import { AuthShell } from "./common";
+import { PasswordInput } from "./ui/password-input";
 
 export function PasswordResetPage() {
   const [params] = useSearchParams();
@@ -61,11 +62,11 @@ export function PasswordResetPage() {
               {uid && token ? (
                 <>
                   <Field label="Nowe hasło">
-                    <Input type="password" autoComplete="new-password" required value={password}
+                    <PasswordInput autoComplete="new-password" required value={password}
                       onChange={(e) => setPassword(e.target.value)} />
                   </Field>
                   <Field label="Powtórz hasło">
-                    <Input type="password" autoComplete="new-password" required value={password2}
+                    <PasswordInput autoComplete="new-password" required value={password2}
                       onChange={(e) => setPassword2(e.target.value)} />
                   </Field>
                 </>

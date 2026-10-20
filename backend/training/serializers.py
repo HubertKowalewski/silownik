@@ -37,9 +37,15 @@ def in_range(lo, hi, message=None):
 # --- KONTO -------------------------------------------------------------------
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'is_staff']
+        fields = ['id', 'username', 'email', 'first_name', 'is_staff', 'avatar_url']
+
+    def get_avatar_url(self, obj) -> str | None:
+        from .avatars import avatar_url_for
+        return avatar_url_for(obj)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -453,12 +459,17 @@ class WorkoutPlanSerializer(serializers.ModelSerializer):
 
 class PlanCommentSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='author.username')
+    author_avatar = serializers.SerializerMethodField()
     is_plan_author = serializers.SerializerMethodField()
 
     class Meta:
         model = PlanComment
-        fields = ['id', 'plan', 'author_name', 'is_plan_author', 'parent', 'text', 'created_at']
+        fields = ['id', 'plan', 'author_name', 'author_avatar', 'is_plan_author', 'parent', 'text', 'created_at']
         read_only_fields = ['plan', 'created_at']
+
+    def get_author_avatar(self, obj) -> str | None:
+        from .avatars import avatar_url_for
+        return avatar_url_for(obj.author)
 
     def get_is_plan_author(self, obj) -> bool:
         return obj.author_id == obj.plan.creator_id

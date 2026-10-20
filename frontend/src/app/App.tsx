@@ -7,6 +7,7 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { UpdateBanner } from "./components/UpdateBanner";
 import { ServerWakeBanner } from "./components/ServerWakeBanner";
 import { Toaster } from "./components/Toaster";
+import { Avatar } from "./components/Avatar";
 import { Button } from "./components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover";
 import { Logo } from "./components/Logo";
@@ -182,6 +183,10 @@ function AppNav() {
             <OfflineBadge />
             <ThemeToggle />
             <Notifications />
+            <NavLink to="/profil" aria-label={`Profil (${user.username})`} title="Profil"
+              className="ml-1 rounded-full ring-offset-2 ring-offset-background transition-shadow hover:ring-2 hover:ring-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Avatar name={user.username} url={user.avatar_url} size="sm" />
+            </NavLink>
             <Button variant="ghost" size="icon" className="hidden md:inline-flex" aria-label={`Wyloguj (${user.username})`} title={`Wyloguj (${user.username})`} onClick={() => logout()}>
               <LogOut className="h-4 w-4" />
             </Button>

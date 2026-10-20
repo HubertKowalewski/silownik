@@ -100,7 +100,7 @@ export function GymDashboard() {
         <StatTile icon={CalendarDays} label={`Treningi ${MONTHS_LOCATIVE[today.getMonth()]}`}
           value={data?.monthlyWorkouts ?? "–"} hint={data ? rhythm(data.monthlyWorkouts) : undefined} />
         <StatTile icon={Weight} label="Objętość w tym miesiącu"
-          value={data ? fmtNumber(data.monthlyTonnage / 1000) : "–"} unit={data ? "t" : undefined}
+          value={data ? fmtNumber(data.monthlyTonnage, 0) : "–"} unit={data ? "kg" : undefined}
           hint="suma ciężar × powtórzenia w seriach roboczych" />
         <div className="tile-gradient rounded-xl border border-border p-4">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><ListChecks className="h-3.5 w-3.5" /> Plan na ten tydzień</div>
