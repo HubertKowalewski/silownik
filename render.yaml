@@ -1,0 +1,29 @@
+# Wdrożenie na Render.com (plan darmowy) - „Blueprint”: Render czyta ten plik z repozytorium GitHub
+# i sam buduje obraz z Dockerfile. Baza danych: darmowy PostgreSQL w Neon (neon.com) - adres podaje się
+# przy tworzeniu usługi w polu DATABASE_URL. Instrukcja krok po kroku: README, sekcja „Aplikacja w internecie”.
+services:
+  - type: web
+    name: silownik
+    runtime: docker
+    plan: free
+    region: frankfurt              # najbliżej Polski
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/ping/    # bez zapytań do bazy - nie wybudza usypianej bazy Neon
+    autoDeployTrigger: commit      # każdy `git push` = nowa wersja aplikacji
+    envVars:
+      - key: DATABASE_URL          # adres bazy z Neon: postgresql://...neon.tech/neondb?sslmode=require
+        sync: false
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DB_CONN_MAX_AGE  # krótko trzymane połączenie - baza może zasnąć, gdy nikt nie ćwiczy
+        value: "60"
+      - key: GUNICORN_WORKERS        # 512 MB RAM na planie darmowym
+        value: "2"
+      - key: GUNICORN_THREADS
+        value: "4"

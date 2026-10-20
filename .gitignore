@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/db.sqlite3
+backend/core/staticfiles/
+
+# Node / frontend
+node_modules/
+# frontend/dist jest w repozytorium celowo: aplikację da się uruchomić bez Node.js
+
+# IDE
+.idea/
+.vscode/
+backend/staticfiles/
+
+# Sekrety wdrożenia
+.env

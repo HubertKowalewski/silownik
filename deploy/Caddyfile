@@ -1,0 +1,10 @@
+# Odwrotne proxy z automatycznym HTTPS. Domena z pliku .env (DOMAIN), np. silownik.example.pl.
+# Do testów na własnym komputerze: DOMAIN=localhost (certyfikat lokalny Caddy).
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:8000
+	header {
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+}

@@ -1,0 +1,12 @@
+Django==6.0.5
+djangorestframework>=3.16
+pandas>=2.2
+numpy>=2.0
+reportlab>=4.2
+drf-spectacular>=0.28
+drf-spectacular-sidecar>=2025.1
+# wdrożenie
+dj-database-url>=2.3
+whitenoise>=6.9
+psycopg[binary]>=3.2
+gunicorn>=23.0; sys_platform != "win32"

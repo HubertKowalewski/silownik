@@ -1,0 +1,715 @@
+{
+  "_BarChart-DL837p2M.js": {
+    "file": "assets/BarChart-DL837p2M.js",
+    "name": "BarChart",
+    "imports": [
+      "_generateCategoricalChart-Bpth1WHD.js"
+    ]
+  },
+  "_ExerciseName-i14g-LsD.js": {
+    "file": "assets/ExerciseName-i14g-LsD.js",
+    "name": "ExerciseName",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_ExercisePicker-rwZFpbMV.js": {
+    "file": "assets/ExercisePicker-rwZFpbMV.js",
+    "name": "ExercisePicker",
+    "imports": [
+      "index.html",
+      "_x-PYCInDub.js",
+      "_chevron-down-Ctkm5e6c.js",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "_LineChart-D_BTwpBn.js": {
+    "file": "assets/LineChart-D_BTwpBn.js",
+    "name": "LineChart",
+    "imports": [
+      "index.html",
+      "_generateCategoricalChart-Bpth1WHD.js"
+    ]
+  },
+  "_PlansPage-CCQxXtNQ.js": {
+    "file": "assets/PlansPage-CCQxXtNQ.js",
+    "name": "PlansPage",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_badge-DIG42mcm.js",
+      "_tabs-LOHgS1xY.js",
+      "_hooks-B_ZqtHu0.js",
+      "_sparkles-zHbnkQjm.js",
+      "_triangle-alert-DHkDYcNX.js",
+      "_users-DR2iDKl8.js",
+      "_message-square-Cp_5Vgld.js",
+      "_wand-sparkles-B8a7xAil.js",
+      "_plus-CKvjBs-p.js"
+    ]
+  },
+  "_RestTimer-sXAaMnsk.js": {
+    "file": "assets/RestTimer-sXAaMnsk.js",
+    "name": "RestTimer",
+    "imports": [
+      "index.html",
+      "_plus-CKvjBs-p.js",
+      "_play-DWffQw5S.js",
+      "_rotate-ccw-BuuXx9RR.js",
+      "_x-PYCInDub.js"
+    ]
+  },
+  "_arrow-up-9GPVo_KZ.js": {
+    "file": "assets/arrow-up-9GPVo_KZ.js",
+    "name": "arrow-up",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_badge-DIG42mcm.js": {
+    "file": "assets/badge-DIG42mcm.js",
+    "name": "badge",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_check-CYNeHsBk.js": {
+    "file": "assets/check-CYNeHsBk.js",
+    "name": "check",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_checkbox-rquu41P8.js": {
+    "file": "assets/checkbox-rquu41P8.js",
+    "name": "checkbox",
+    "imports": [
+      "index.html",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "_chevron-down-Ctkm5e6c.js": {
+    "file": "assets/chevron-down-Ctkm5e6c.js",
+    "name": "chevron-down",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_chevron-right-Dh3p87nw.js": {
+    "file": "assets/chevron-right-Dh3p87nw.js",
+    "name": "chevron-right",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_chevron-up-CIUqFl14.js": {
+    "file": "assets/chevron-up-CIUqFl14.js",
+    "name": "chevron-up",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_clipboard-check-CM1zcK0d.js": {
+    "file": "assets/clipboard-check-CM1zcK0d.js",
+    "name": "clipboard-check",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_copy-VNaTB5gD.js": {
+    "file": "assets/copy-VNaTB5gD.js",
+    "name": "copy",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_download-Cq3jIyc2.js": {
+    "file": "assets/download-Cq3jIyc2.js",
+    "name": "download",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_flag-B4WMGNU9.js": {
+    "file": "assets/flag-B4WMGNU9.js",
+    "name": "flag",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_generateCategoricalChart-Bpth1WHD.js": {
+    "file": "assets/generateCategoricalChart-Bpth1WHD.js",
+    "name": "generateCategoricalChart",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_hooks-B_ZqtHu0.js": {
+    "file": "assets/hooks-B_ZqtHu0.js",
+    "name": "hooks",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_message-square-Cp_5Vgld.js": {
+    "file": "assets/message-square-Cp_5Vgld.js",
+    "name": "message-square",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_oneRepMax-Du5aKmS0.js": {
+    "file": "assets/oneRepMax-Du5aKmS0.js",
+    "name": "oneRepMax"
+  },
+  "_pen-line-BQv1NIK0.js": {
+    "file": "assets/pen-line-BQv1NIK0.js",
+    "name": "pen-line",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_play-DWffQw5S.js": {
+    "file": "assets/play-DWffQw5S.js",
+    "name": "play",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_plus-CKvjBs-p.js": {
+    "file": "assets/plus-CKvjBs-p.js",
+    "name": "plus",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_progress-BrIacZ1s.js": {
+    "file": "assets/progress-BrIacZ1s.js",
+    "name": "progress",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_rotate-ccw-BuuXx9RR.js": {
+    "file": "assets/rotate-ccw-BuuXx9RR.js",
+    "name": "rotate-ccw",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_save-CMmoajTU.js": {
+    "file": "assets/save-CMmoajTU.js",
+    "name": "save",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_sparkles-zHbnkQjm.js": {
+    "file": "assets/sparkles-zHbnkQjm.js",
+    "name": "sparkles",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_square-pen-jUzuGDpn.js": {
+    "file": "assets/square-pen-jUzuGDpn.js",
+    "name": "square-pen",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_switch-BZQ2ywOX.js": {
+    "file": "assets/switch-BZQ2ywOX.js",
+    "name": "switch",
+    "imports": [
+      "index.html",
+      "_checkbox-rquu41P8.js"
+    ]
+  },
+  "_tabs-LOHgS1xY.js": {
+    "file": "assets/tabs-LOHgS1xY.js",
+    "name": "tabs",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_textarea-C4iAAI-I.js": {
+    "file": "assets/textarea-C4iAAI-I.js",
+    "name": "textarea",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_trash-2-CR_wasqO.js": {
+    "file": "assets/trash-2-CR_wasqO.js",
+    "name": "trash-2",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_trending-up-CN7vEk2D.js": {
+    "file": "assets/trending-up-CN7vEk2D.js",
+    "name": "trending-up",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_triangle-alert-DHkDYcNX.js": {
+    "file": "assets/triangle-alert-DHkDYcNX.js",
+    "name": "triangle-alert",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_trophy-CgR6ds_g.js": {
+    "file": "assets/trophy-CgR6ds_g.js",
+    "name": "trophy",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_users-DR2iDKl8.js": {
+    "file": "assets/users-DR2iDKl8.js",
+    "name": "users",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_wand-sparkles-B8a7xAil.js": {
+    "file": "assets/wand-sparkles-B8a7xAil.js",
+    "name": "wand-sparkles",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_weight-BvGLK1_M.js": {
+    "file": "assets/weight-BvGLK1_M.js",
+    "name": "weight",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_x-PYCInDub.js": {
+    "file": "assets/x-PYCInDub.js",
+    "name": "x",
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/index-D938FbG5.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/app/components/GymDashboard.tsx",
+      "src/app/components/WorkoutLogger.tsx",
+      "_PlansPage-CCQxXtNQ.js",
+      "src/app/components/PlanEditor.tsx",
+      "src/app/components/TemplatesPage.tsx",
+      "src/app/components/PlanCreatePage.tsx",
+      "src/app/components/PlanAssistantPage.tsx",
+      "src/app/components/PlanDetails.tsx",
+      "src/app/components/StatsPage.tsx",
+      "src/app/components/MeasurementsPage.tsx",
+      "src/app/components/ProfilePage.tsx",
+      "src/app/components/HistoryPage.tsx",
+      "src/app/components/PasswordResetPage.tsx",
+      "src/app/components/PublicProfilePage.tsx",
+      "src/app/components/ModerationPage.tsx",
+      "src/app/components/SusPage.tsx"
+    ],
+    "css": [
+      "assets/index-CpsQdoEB.css"
+    ],
+    "assets": [
+      "assets/logo-mark-CIvkYPX2.webp",
+      "assets/big-shoulders-display-vietnamese-700-normal-DCH5bIkD.woff2",
+      "assets/big-shoulders-display-vietnamese-700-normal-D5dmK5Ek.woff",
+      "assets/big-shoulders-display-latin-ext-700-normal-C8xZtiKd.woff2",
+      "assets/big-shoulders-display-latin-ext-700-normal-D98SaizC.woff",
+      "assets/big-shoulders-display-latin-700-normal-KM2fueoL.woff2",
+      "assets/big-shoulders-display-latin-700-normal-CMi6UoP4.woff",
+      "assets/big-shoulders-display-vietnamese-800-normal-TfqTMNKp.woff2",
+      "assets/big-shoulders-display-vietnamese-800-normal-zHzF0To4.woff",
+      "assets/big-shoulders-display-latin-ext-800-normal-fpv_pHPA.woff2",
+      "assets/big-shoulders-display-latin-ext-800-normal-BQnXNQRw.woff",
+      "assets/big-shoulders-display-latin-800-normal-DDUD9Xuh.woff2",
+      "assets/big-shoulders-display-latin-800-normal-CI0lhnTM.woff",
+      "assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2",
+      "assets/onest-cyrillic-wght-normal-DayYxulF.woff2",
+      "assets/onest-math-wght-normal-Bl4ZGkZl.woff2",
+      "assets/onest-symbols-wght-normal-DxQzqQfC.woff2",
+      "assets/onest-vietnamese-wght-normal-BBxOatbv.woff2",
+      "assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2",
+      "assets/onest-latin-wght-normal-Dun_Rd-l.woff2"
+    ]
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-cyrillic-ext-wght-normal.woff2": {
+    "file": "assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-cyrillic-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2": {
+    "file": "assets/onest-cyrillic-wght-normal-DayYxulF.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-latin-ext-wght-normal.woff2": {
+    "file": "assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-latin-wght-normal.woff2": {
+    "file": "assets/onest-latin-wght-normal-Dun_Rd-l.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-math-wght-normal.woff2": {
+    "file": "assets/onest-math-wght-normal-Bl4ZGkZl.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-math-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-symbols-wght-normal.woff2": {
+    "file": "assets/onest-symbols-wght-normal-DxQzqQfC.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-symbols-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/onest/files/onest-vietnamese-wght-normal.woff2": {
+    "file": "assets/onest-vietnamese-wght-normal-BBxOatbv.woff2",
+    "src": "node_modules/@fontsource-variable/onest/files/onest-vietnamese-wght-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff": {
+    "file": "assets/big-shoulders-display-latin-700-normal-CMi6UoP4.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff2": {
+    "file": "assets/big-shoulders-display-latin-700-normal-KM2fueoL.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff": {
+    "file": "assets/big-shoulders-display-latin-800-normal-CI0lhnTM.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2": {
+    "file": "assets/big-shoulders-display-latin-800-normal-DDUD9Xuh.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff": {
+    "file": "assets/big-shoulders-display-latin-ext-700-normal-D98SaizC.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff2": {
+    "file": "assets/big-shoulders-display-latin-ext-700-normal-C8xZtiKd.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff": {
+    "file": "assets/big-shoulders-display-latin-ext-800-normal-BQnXNQRw.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff2": {
+    "file": "assets/big-shoulders-display-latin-ext-800-normal-fpv_pHPA.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-ext-800-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff": {
+    "file": "assets/big-shoulders-display-vietnamese-700-normal-D5dmK5Ek.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff2": {
+    "file": "assets/big-shoulders-display-vietnamese-700-normal-DCH5bIkD.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-700-normal.woff2"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff": {
+    "file": "assets/big-shoulders-display-vietnamese-800-normal-zHzF0To4.woff",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff"
+  },
+  "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff2": {
+    "file": "assets/big-shoulders-display-vietnamese-800-normal-TfqTMNKp.woff2",
+    "src": "node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-vietnamese-800-normal.woff2"
+  },
+  "src/app/components/GymDashboard.tsx": {
+    "file": "assets/GymDashboard-DMOzeroT.js",
+    "name": "GymDashboard",
+    "src": "src/app/components/GymDashboard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_download-Cq3jIyc2.js",
+      "_x-PYCInDub.js",
+      "_progress-BrIacZ1s.js",
+      "_play-DWffQw5S.js",
+      "_weight-BvGLK1_M.js",
+      "_chevron-right-Dh3p87nw.js",
+      "_trending-up-CN7vEk2D.js",
+      "_generateCategoricalChart-Bpth1WHD.js",
+      "_BarChart-DL837p2M.js"
+    ]
+  },
+  "src/app/components/HistoryPage.tsx": {
+    "file": "assets/HistoryPage-CCvzdOhm.js",
+    "name": "HistoryPage",
+    "src": "src/app/components/HistoryPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_oneRepMax-Du5aKmS0.js",
+      "_RestTimer-sXAaMnsk.js",
+      "_ExerciseName-i14g-LsD.js",
+      "_chevron-up-CIUqFl14.js",
+      "_chevron-down-Ctkm5e6c.js",
+      "_square-pen-jUzuGDpn.js",
+      "_trash-2-CR_wasqO.js",
+      "_plus-CKvjBs-p.js",
+      "_play-DWffQw5S.js",
+      "_rotate-ccw-BuuXx9RR.js",
+      "_x-PYCInDub.js"
+    ]
+  },
+  "src/app/components/MeasurementsPage.tsx": {
+    "file": "assets/MeasurementsPage-CDkV0pMQ.js",
+    "name": "MeasurementsPage",
+    "src": "src/app/components/MeasurementsPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_tabs-LOHgS1xY.js",
+      "_progress-BrIacZ1s.js",
+      "_badge-DIG42mcm.js",
+      "_oneRepMax-Du5aKmS0.js",
+      "_hooks-B_ZqtHu0.js",
+      "_ExerciseName-i14g-LsD.js",
+      "_save-CMmoajTU.js",
+      "_generateCategoricalChart-Bpth1WHD.js",
+      "_LineChart-D_BTwpBn.js",
+      "_trash-2-CR_wasqO.js",
+      "_ExercisePicker-rwZFpbMV.js",
+      "_x-PYCInDub.js",
+      "_chevron-down-Ctkm5e6c.js",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "src/app/components/ModerationPage.tsx": {
+    "file": "assets/ModerationPage-DPGyorY8.js",
+    "name": "ModerationPage",
+    "src": "src/app/components/ModerationPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_badge-DIG42mcm.js",
+      "src/app/components/SusPage.tsx",
+      "_clipboard-check-CM1zcK0d.js",
+      "_flag-B4WMGNU9.js",
+      "_message-square-Cp_5Vgld.js",
+      "_rotate-ccw-BuuXx9RR.js",
+      "_textarea-C4iAAI-I.js"
+    ]
+  },
+  "src/app/components/PasswordResetPage.tsx": {
+    "file": "assets/PasswordResetPage-w5THY6hm.js",
+    "name": "PasswordResetPage",
+    "src": "src/app/components/PasswordResetPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "src/app/components/PlanAssistantPage.tsx": {
+    "file": "assets/PlanAssistantPage-CIxLID_m.js",
+    "name": "PlanAssistantPage",
+    "src": "src/app/components/PlanAssistantPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_hooks-B_ZqtHu0.js",
+      "_RestTimer-sXAaMnsk.js",
+      "_badge-DIG42mcm.js",
+      "_wand-sparkles-B8a7xAil.js",
+      "_x-PYCInDub.js",
+      "_triangle-alert-DHkDYcNX.js",
+      "_check-CYNeHsBk.js",
+      "_chevron-up-CIUqFl14.js",
+      "_chevron-down-Ctkm5e6c.js",
+      "_ExercisePicker-rwZFpbMV.js",
+      "_plus-CKvjBs-p.js",
+      "_play-DWffQw5S.js",
+      "_rotate-ccw-BuuXx9RR.js"
+    ]
+  },
+  "src/app/components/PlanCreatePage.tsx": {
+    "file": "assets/PlanCreatePage-D4jDrNr3.js",
+    "name": "PlanCreatePage",
+    "src": "src/app/components/PlanCreatePage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_sparkles-zHbnkQjm.js",
+      "_wand-sparkles-B8a7xAil.js",
+      "_pen-line-BQv1NIK0.js",
+      "_chevron-right-Dh3p87nw.js"
+    ]
+  },
+  "src/app/components/PlanDetails.tsx": {
+    "file": "assets/PlanDetails-zZk5oiYa.js",
+    "name": "PlanDetails",
+    "src": "src/app/components/PlanDetails.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_badge-DIG42mcm.js",
+      "_textarea-C4iAAI-I.js",
+      "_switch-BZQ2ywOX.js",
+      "_checkbox-rquu41P8.js",
+      "_hooks-B_ZqtHu0.js",
+      "_ExerciseName-i14g-LsD.js",
+      "_triangle-alert-DHkDYcNX.js",
+      "_sparkles-zHbnkQjm.js",
+      "_play-DWffQw5S.js",
+      "_square-pen-jUzuGDpn.js",
+      "_copy-VNaTB5gD.js",
+      "_trash-2-CR_wasqO.js",
+      "_users-DR2iDKl8.js",
+      "_flag-B4WMGNU9.js",
+      "_message-square-Cp_5Vgld.js",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "src/app/components/PlanEditor.tsx": {
+    "file": "assets/PlanEditor-Di_obgu8.js",
+    "name": "PlanEditor",
+    "src": "src/app/components/PlanEditor.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_textarea-C4iAAI-I.js",
+      "_checkbox-rquu41P8.js",
+      "_switch-BZQ2ywOX.js",
+      "_hooks-B_ZqtHu0.js",
+      "_pen-line-BQv1NIK0.js",
+      "_copy-VNaTB5gD.js",
+      "_trash-2-CR_wasqO.js",
+      "_ExercisePicker-rwZFpbMV.js",
+      "_arrow-up-9GPVo_KZ.js",
+      "_plus-CKvjBs-p.js",
+      "_save-CMmoajTU.js",
+      "_check-CYNeHsBk.js",
+      "_x-PYCInDub.js",
+      "_chevron-down-Ctkm5e6c.js"
+    ]
+  },
+  "src/app/components/ProfilePage.tsx": {
+    "file": "assets/ProfilePage-C3uysTGl.js",
+    "name": "ProfilePage",
+    "src": "src/app/components/ProfilePage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_textarea-C4iAAI-I.js",
+      "_checkbox-rquu41P8.js",
+      "_switch-BZQ2ywOX.js",
+      "_RestTimer-sXAaMnsk.js",
+      "_save-CMmoajTU.js",
+      "_download-Cq3jIyc2.js",
+      "_trash-2-CR_wasqO.js",
+      "_clipboard-check-CM1zcK0d.js",
+      "_check-CYNeHsBk.js",
+      "_plus-CKvjBs-p.js",
+      "_play-DWffQw5S.js",
+      "_rotate-ccw-BuuXx9RR.js",
+      "_x-PYCInDub.js"
+    ]
+  },
+  "src/app/components/PublicProfilePage.tsx": {
+    "file": "assets/PublicProfilePage-C_APEhtM.js",
+    "name": "PublicProfilePage",
+    "src": "src/app/components/PublicProfilePage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_badge-DIG42mcm.js",
+      "_PlansPage-CCQxXtNQ.js",
+      "_hooks-B_ZqtHu0.js",
+      "_generateCategoricalChart-Bpth1WHD.js",
+      "_BarChart-DL837p2M.js",
+      "_tabs-LOHgS1xY.js",
+      "_sparkles-zHbnkQjm.js",
+      "_triangle-alert-DHkDYcNX.js",
+      "_users-DR2iDKl8.js",
+      "_message-square-Cp_5Vgld.js",
+      "_wand-sparkles-B8a7xAil.js",
+      "_plus-CKvjBs-p.js"
+    ]
+  },
+  "src/app/components/StatsPage.tsx": {
+    "file": "assets/StatsPage-6E23D5T3.js",
+    "name": "StatsPage",
+    "src": "src/app/components/StatsPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_progress-BrIacZ1s.js",
+      "_badge-DIG42mcm.js",
+      "_hooks-B_ZqtHu0.js",
+      "_ExerciseName-i14g-LsD.js",
+      "_ExercisePicker-rwZFpbMV.js",
+      "_generateCategoricalChart-Bpth1WHD.js",
+      "_LineChart-D_BTwpBn.js",
+      "_trophy-CgR6ds_g.js",
+      "_weight-BvGLK1_M.js",
+      "_BarChart-DL837p2M.js",
+      "_x-PYCInDub.js",
+      "_chevron-down-Ctkm5e6c.js",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "src/app/components/SusPage.tsx": {
+    "file": "assets/SusPage-B1IKL2BY.js",
+    "name": "SusPage",
+    "src": "src/app/components/SusPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_textarea-C4iAAI-I.js",
+      "_clipboard-check-CM1zcK0d.js"
+    ]
+  },
+  "src/app/components/TemplatesPage.tsx": {
+    "file": "assets/TemplatesPage-CMKo1jTK.js",
+    "name": "TemplatesPage",
+    "src": "src/app/components/TemplatesPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_badge-DIG42mcm.js",
+      "_checkbox-rquu41P8.js",
+      "_hooks-B_ZqtHu0.js",
+      "_sparkles-zHbnkQjm.js",
+      "_wand-sparkles-B8a7xAil.js",
+      "_check-CYNeHsBk.js"
+    ]
+  },
+  "src/app/components/WorkoutLogger.tsx": {
+    "file": "assets/WorkoutLogger-CDyHjjPh.js",
+    "name": "WorkoutLogger",
+    "src": "src/app/components/WorkoutLogger.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_hooks-B_ZqtHu0.js",
+      "_RestTimer-sXAaMnsk.js",
+      "_textarea-C4iAAI-I.js",
+      "_oneRepMax-Du5aKmS0.js",
+      "_badge-DIG42mcm.js",
+      "_ExercisePicker-rwZFpbMV.js",
+      "_check-CYNeHsBk.js",
+      "_x-PYCInDub.js",
+      "_ExerciseName-i14g-LsD.js",
+      "_arrow-up-9GPVo_KZ.js",
+      "_trash-2-CR_wasqO.js",
+      "_plus-CKvjBs-p.js",
+      "_trending-up-CN7vEk2D.js",
+      "_trophy-CgR6ds_g.js",
+      "_save-CMmoajTU.js",
+      "_play-DWffQw5S.js",
+      "_rotate-ccw-BuuXx9RR.js",
+      "_chevron-down-Ctkm5e6c.js"
+    ]
+  },
+  "src/assets/logo-mark.webp": {
+    "file": "assets/logo-mark-CIvkYPX2.webp",
+    "src": "src/assets/logo-mark.webp"
+  }
+}

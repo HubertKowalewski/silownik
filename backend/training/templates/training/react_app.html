@@ -1,0 +1,33 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f1f9" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14101c" />
+    <script src="{% static 'dist/theme-init.js' %}"></script>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dist/icons/favicon-32.png' %}" />
+    <link rel="apple-touch-icon" href="{% static 'dist/icons/apple-touch-icon.png' %}" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Siłownik" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Siłownik - plan treningu siłowego, zapis serii i analiza postępów." />
+    <title>Siłownik</title>
+    {% if assets %}{% for css in assets.css %}
+    <link rel="stylesheet" href="{% static 'dist/' %}{{ css }}" />{% endfor %}
+    {% endif %}
+  </head>
+  <body>
+    <div id="root"></div>
+    {% if assets %}
+    <script type="module" src="{% static 'dist/' %}{{ assets.js }}"></script>
+    {% else %}
+    <p style="font-family:sans-serif;padding:2rem">
+      Brak zbudowanego frontendu (katalog <code>frontend/dist</code>). Uruchom <code>npm run build</code> w katalogu <code>frontend</code>
+      albo korzystaj z serwera deweloperskiego Vite (<code>npm run dev</code>, adres http://localhost:5173).
+    </p>
+    {% endif %}
+  </body>
+</html>

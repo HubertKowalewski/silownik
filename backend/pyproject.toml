@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["training/migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "DTZ", "RUF"]
+# RUF012: atrybuty klas DRF/Django (permission_classes, fields) to idiomatyczne listy
+# RUF001-003: znaki ×, – w tekstach po polsku są zamierzone; SIM115: FileResponse sam zamyka plik
+ignore = ["RUF012", "E501", "RUF001", "RUF002", "RUF003", "SIM115"]
+
+[tool.coverage.run]
+source = ["training", "core"]
+omit = ["*/migrations/*", "*/tests.py", "core/asgi.py", "core/wsgi.py", "manage.py"]
+
+[tool.coverage.report]
+show_missing = false
+skip_covered = true

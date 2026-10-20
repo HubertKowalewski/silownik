@@ -1,0 +1,48 @@
+# Wdrożenie: baza PostgreSQL + aplikacja + Caddy (HTTPS z automatycznym certyfikatem Let's Encrypt).
+# Uruchomienie:  cp .env.example .env  (uzupełnij)  ->  docker compose up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-silownik}
+      POSTGRES_USER: ${POSTGRES_USER:-silownik}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ustaw POSTGRES_PASSWORD w pliku .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-silownik} -d ${POSTGRES_DB:-silownik}"]
+      interval: 10s
+      retries: 5
+
+  web:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-silownik}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-silownik}
+      DJANGO_ALLOWED_HOSTS: ${DOMAIN:?Ustaw DOMAIN w pliku .env},localhost,127.0.0.1
+      DJANGO_CSRF_ORIGINS: https://${DOMAIN}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:
